@@ -1,0 +1,10 @@
+.vscode/
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*.cache

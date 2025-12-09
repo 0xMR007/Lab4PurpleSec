@@ -1,0 +1,21 @@
+# Lab4PurpleSec - Hosts File
+# This file defines static hostname and IP address mappings for all lab virtual machines.
+# Used for /etc/hosts population and consistent resolving of lab machines across scenarios.
+# Note: DMZ machines should not have all the hostnames of the LAN machines, only the ones that are accessible from the DMZ.
+
+# LAN
+192.168.10.100 test.lab LAN-TEST-LIN
+192.168.10.104 siem.lab LAN-SIEM-LIN
+192.168.10.109 attack.lab LAN-ATTACK-LIN
+192.168.10.30 minilab.dc LAN-DC01-WIN
+192.168.10.31 minilab.ws01 LAN-WS01-WIN
+
+# DMZ
+192.168.20.105 vuln-web.lab DMZ-WEB01-LIN
+192.168.20.105 juice.lab bwapp.lab nodegoat.lab webgoat.lab vampi.lab
+192.168.20.104 metasploitable2 ms2 DMZ-MS2-LIN
+192.168.20.106 metasploitable3-lin ms3-lin DMZ-MS3-LIN
+192.168.20.107 metasploitable3-win ms3-win DMZ-MS3-WIN
+
+# pfSense (LAN)
+192.168.10.1 pfsense.lab pfsense.Lab4PurpleSec
