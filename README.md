@@ -2,6 +2,12 @@
 
 # Lab4PurpleSec
 
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![Platform](https://img.shields.io/badge/platform-VMware%20%7C%20VirtualBox%20%7C%20Hyper--V-lightgrey.svg)
+![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)
+
 > **Note**: This project was previously named "Lab4OffSec" and has been renamed to "Lab4PurpleSec" to better reflect its Purple Team focus.
 
 ![🇫🇷 Version française disponible ici](/README_FR.md)
