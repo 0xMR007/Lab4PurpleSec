@@ -1,0 +1,61 @@
+# ============================================================================
+# Lab4PurpleSec - Vagrant Configuration File
+# ============================================================================
+# This file contains default configuration values for the Vagrantfile.
+# You can override these values by setting environment variables or
+# modifying the Vagrantfile directly.
+# ============================================================================
+
+# Provider configuration
+provider: "virtualbox" # Options: virtualbox, vmware_desktop (if plugin installed)
+
+# Network configuration
+networks:
+  wan:
+    type: "public_network" # Bridged network
+    bridge: "auto" # Auto-detect bridge interface
+  lan:
+    name: "lab-lan" # VirtualBox internal network name
+    subnet: "192.168.10.0/24"
+    gateway: "192.168.10.1"
+  dmz:
+    name: "lab-dmz" # VirtualBox internal network name
+    subnet: "192.168.20.0/24"
+    gateway: "192.168.20.1"
+
+# Default resource allocation (can be overridden per VM)
+default_resources:
+  memory: 2048 # MB
+  cpus: 2
+  disk_size: 20480 # MB (not used by VirtualBox, for reference)
+
+# VM-specific overrides (if needed, can be added to Vagrantfile)
+# vm_overrides:
+#   lan-siem-lin:
+#     memory: 4096
+#     cpus: 2
+
+# Ansible provisioning (disabled until Phase D)
+ansible:
+  enabled: false
+  playbook: "ansible/playbooks/site.yml"
+  inventory: "inventory.yml"
+
+# External VMs information (for documentation/helper scripts)
+external_vms:
+  goad:
+    repository: "https://github.com/Orange-Cyberdefense/GOAD"
+    vms: ["LAN-DC01-WIN", "LAN-WS01-WIN"]
+    launch_command: "cd <GOAD_REPO> && py goad.py -m vm"
+  metasploitable3:
+    repository: "https://github.com/rapid7/metasploitable3"
+    vms: ["DMZ-MS3-LIN", "DMZ-MS3-WIN"]
+    launch_command: "cd <MS3_REPO> && vagrant up"
+  metasploitable2:
+    repository: "https://www.rapid7.com/products/metasploit/metasploitable/"
+    vms: ["DMZ-MS2-LIN"]
+    launch_command: "Manual VMX import"
+  pfsense:
+    repository: "Manual installation"
+    vms: ["FW-PFSENSE"]
+    launch_command: "Manual ISO installation - See ORCHESTRATION.md and ../docs/SETUP/pfsense_setup.md"

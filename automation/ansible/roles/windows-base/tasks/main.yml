@@ -1,0 +1,67 @@
+# ============================================================================
+# Windows Base Role - Main Tasks
+# ============================================================================
+# This role applies Windows-specific base configuration:
+# - WinRM configuration
+# - Windows updates
+# - Basic utilities
+# ============================================================================
+#
+# NOTE: This role is a placeholder for future Windows VM support.
+# Currently, Windows VMs (GOAD) are managed externally.
+# This role can be used if you add Windows VMs to the internal automation.
+# ============================================================================
+
+---
+- name: Check if WinRM is configured
+  win_shell: |
+    $service = Get-Service -Name WinRM -ErrorAction SilentlyContinue
+    if ($service) { exit 0 } else { exit 1 }
+  register: winrm_check
+  changed_when: false
+  failed_when: false
+
+- name: Configure WinRM HTTP listener
+  win_shell: |
+    winrm quickconfig -q
+    winrm set winrm/config/service/auth '@{Basic="true"}'
+    winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+  when: winrm_check.rc != 0
+  changed_when: true
+
+- name: Configure WinRM HTTPS listener (if needed)
+  win_shell: |
+    $cert = New-SelfSignedCertificate -DnsName $env:COMPUTERNAME -CertStoreLocation Cert:\LocalMachine\My
+    winrm create winrm/config/Listener?Address=*+Transport=HTTPS "@{Hostname=`"$($cert.DnsNameList[0])`";CertificateThumbprint=`"$($cert.Thumbprint)`"}"
+  when: 
+    - winrm_check.rc != 0
+    - windows_base_winrm_https | default(false) | bool
+  changed_when: true
+
+- name: Set PowerShell execution policy
+  win_shell: |
+    Set-ExecutionPolicy -ExecutionPolicy {{ windows_base_powershell_execution_policy }} -Force
+  changed_when: true
+
+- name: Install Chocolatey (if enabled)
+  win_chocolatey:
+    name: chocolatey
+    state: present
+  when: windows_base_install_chocolatey | default(false) | bool
+
+- name: Install Windows updates (if enabled)
+  win_updates:
+    category_names:
+      - SecurityUpdates
+      - CriticalUpdates
+    state: installed
+  when: windows_base_install_updates | default(false) | bool
+  register: windows_updates
+  async: 3600
+  poll: 30
+
+- name: Reboot if Windows updates were installed
+  win_reboot:
+  when:
+    - windows_base_install_updates | default(false) | bool
+    - windows_updates.reboot_required | default(false) | bool

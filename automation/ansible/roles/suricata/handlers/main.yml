@@ -1,0 +1,16 @@
+# ============================================================================
+# Suricata Role - Handlers
+# ============================================================================
+# Handlers for the suricata role
+# ============================================================================
+
+---
+# Handlers will be implemented in Phase F if needed
+# Placeholder structure
+
+- name: restart suricata
+  systemd:
+    name: suricata
+    state: restarted
+  listen: suricata_restart
+

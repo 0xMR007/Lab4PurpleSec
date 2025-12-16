@@ -1,0 +1,30 @@
+# ============================================================================
+# Docker Role - Default Variables (Application Deployment)
+# ============================================================================
+# Default variables for the docker role
+# NOTE: Docker installation variables are in linux-base role
+# ============================================================================
+
+---
+# Enable/disable Docker application deployment
+docker_enabled: true
+
+# Docker Compose configuration
+docker_compose_dir: "/opt/webapps"
+docker_compose_user: "webadmin"
+docker_compose_group: "webadmin"
+
+# Create webadmin user
+docker_create_webadmin: true
+docker_webadmin_user: "webadmin"
+
+# Deploy docker-compose.yml and nginx.conf from CONFIGS directory
+docker_deploy_compose: true  # Deploy docker-compose.yml
+docker_deploy_nginx: true  # Deploy nginx.conf
+
+# NodeGoat configuration
+docker_nodegoat_enabled: true
+
+# Docker Compose options
+docker_pull_images: true  # Pull images before starting
+docker_restart_services: false  # Restart services if already running

@@ -1,0 +1,16 @@
+# ============================================================================
+# Windows Base Role - Handlers
+# ============================================================================
+# Handlers for the windows-base role
+# ============================================================================
+
+---
+# Handlers will be implemented in Phase D if needed
+# Placeholder structure
+
+# Example handlers:
+# - name: restart winrm
+#   win_service:
+#     name: WinRM
+#     state: restarted
+

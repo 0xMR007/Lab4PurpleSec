@@ -1,0 +1,150 @@
+# ============================================================================
+# Common Role - Main Tasks
+# ============================================================================
+# This role applies common configuration to all hosts:
+# - User management
+# - SSH keys
+# - NTP configuration
+# - Timezone setup
+# - Basic packages
+# ============================================================================
+
+---
+- name: Update package cache (Debian/Ubuntu)
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_pkg_mgr == "apt"
+  become: yes
+
+- name: Update package cache (RedHat/CentOS)
+  yum:
+    update_cache: yes
+  when: ansible_pkg_mgr == "yum"
+  become: yes
+
+- name: Install common packages
+  package:
+    name: "{{ common_packages }}"
+    state: present
+  become: yes
+
+- name: Configure timezone
+  timezone:
+    name: "{{ common_timezone }}"
+  become: yes
+  notify: restart systemd-timesyncd
+
+- name: Check if systemd-timesyncd is available
+  command: systemctl list-unit-files systemd-timesyncd.service
+  register: timesyncd_available
+  changed_when: false
+  failed_when: false
+  when: ansible_distribution in ["Debian", "Ubuntu"]
+
+- name: Check if chronyd is available
+  command: systemctl list-unit-files chronyd.service
+  register: chronyd_available
+  changed_when: false
+  failed_when: false
+  when: ansible_distribution in ["RedHat", "CentOS", "Rocky"]
+
+- name: Install systemd-timesyncd if not present (Debian/Ubuntu)
+  package:
+    name: systemd-timesyncd
+    state: present
+  become: yes
+  when:
+    - ansible_distribution in ["Debian", "Ubuntu"]
+    - timesyncd_available.rc != 0
+  ignore_errors: yes
+
+- name: Configure NTP servers (systemd-timesyncd)
+  lineinfile:
+    path: /etc/systemd/timesyncd.conf
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+    backup: yes
+  loop:
+    - { key: "NTP", value: "{{ common_ntp_servers | join(' ') }}" }
+    - { key: "FallbackNTP", value: "{{ common_ntp_servers | join(' ') }}" }
+  when:
+    - ansible_distribution in ["Debian", "Ubuntu"]
+    - timesyncd_available is defined
+  become: yes
+  notify: restart systemd-timesyncd
+  ignore_errors: yes
+
+- name: Configure NTP servers (chronyd)
+  lineinfile:
+    path: /etc/chrony.conf
+    regexp: "^server {{ item }}"
+    line: "server {{ item }} iburst"
+    state: present
+  loop: "{{ common_ntp_servers }}"
+  when:
+    - ansible_distribution in ["RedHat", "CentOS", "Rocky"]
+    - chronyd_available is defined
+  become: yes
+  notify: restart chronyd
+  ignore_errors: yes
+
+- name: Ensure NTP service is running (systemd-timesyncd)
+  systemd:
+    name: systemd-timesyncd
+    enabled: yes
+    state: started
+  become: yes
+  when:
+    - ansible_distribution in ['Debian', 'Ubuntu']
+    - timesyncd_available is defined
+    - timesyncd_available.rc == 0
+  ignore_errors: yes
+
+- name: Ensure NTP service is running (chronyd)
+  systemd:
+    name: chronyd
+    enabled: yes
+    state: started
+  become: yes
+  when:
+    - ansible_distribution in ["RedHat", "CentOS", "Rocky"]
+    - chronyd_available is defined
+    - chronyd_available.rc == 0
+  ignore_errors: yes
+
+- name: Configure SSH settings
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^{{ item.key }} "
+    line: "{{ item.key }} {{ item.value }}"
+    backup: yes
+  loop:
+    - { key: "PermitRootLogin", value: "{{ 'yes' if common_ssh_permit_root_login else 'no' }}" }
+    - { key: "PasswordAuthentication", value: "{{ 'yes' if common_ssh_password_authentication else 'no' }}" }
+  become: yes
+  notify: restart sshd
+
+- name: Create users
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | default([]) }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    create_home: yes
+    state: present
+  loop: "{{ common_users }}"
+  become: yes
+  when: common_users | length > 0
+
+- name: Add SSH keys to users
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+    state: present
+  loop: "{{ common_users | subelements('ssh_keys', skip_missing=True) }}"
+  become: yes
+  when: 
+    - common_users | length > 0
+    - item.0.ssh_keys is defined
+    - item.0.ssh_keys | length > 0
+

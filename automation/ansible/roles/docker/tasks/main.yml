@@ -1,0 +1,129 @@
+# ============================================================================
+# Docker Role - Main Tasks (Application Deployment)
+# ============================================================================
+# This role deploys Docker applications using docker-compose.
+# NOTE: Docker installation is handled by linux-base role.
+# This role focuses on deploying applications.
+# ============================================================================
+
+---
+- name: Check if Docker is installed
+  command: which docker
+  register: docker_check
+  changed_when: false
+  failed_when: false
+
+- name: Ensure Docker is installed
+  fail:
+    msg: "Docker must be installed first. Use linux-base role or set linux_base_install_docker=true"
+  when: docker_check.rc != 0
+
+- name: Create webadmin user (if specified)
+  user:
+    name: "{{ docker_webadmin_user | default('webadmin') }}"
+    groups: docker
+    shell: /bin/bash
+    create_home: yes
+    state: present
+  become: yes
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_create_webadmin | default(true) | bool
+
+- name: Ensure Docker Compose directory exists
+  file:
+    path: "{{ docker_compose_dir | default('/opt/webapps') }}"
+    state: directory
+    owner: "{{ docker_compose_user | default('webadmin') }}"
+    group: "{{ docker_compose_group | default('webadmin') }}"
+    mode: "0755"
+  become: yes
+  when: docker_enabled | default(true) | bool
+
+- name: Deploy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_compose_dir | default('/opt/webapps') }}/docker-compose.yml"
+    owner: "{{ docker_compose_user | default('webadmin') }}"
+    group: "{{ docker_compose_group | default('webadmin') }}"
+    mode: "0644"
+  become: yes
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_deploy_compose | default(true) | bool
+  notify: restart docker compose
+
+- name: Deploy nginx.conf
+  copy:
+    src: nginx.conf
+    dest: "{{ docker_compose_dir | default('/opt/webapps') }}/nginx.conf"
+    owner: "{{ docker_compose_user | default('webadmin') }}"
+    group: "{{ docker_compose_group | default('webadmin') }}"
+    mode: "0644"
+  become: yes
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_deploy_nginx | default(true) | bool
+  notify: restart docker compose
+
+- name: Check if docker-compose.yml exists
+  stat:
+    path: "{{ docker_compose_dir | default('/opt/webapps') }}/docker-compose.yml"
+  register: docker_compose_file_stat
+
+- name: Pull Docker images (using docker compose command)
+  command: docker compose pull
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_pull_images | default(true) | bool
+    - docker_check.rc == 0
+    - docker_compose_file_stat.stat.exists
+  changed_when: false
+  failed_when: false
+
+- name: Start Docker Compose services (using docker compose command)
+  command: docker compose up -d
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_check.rc == 0
+    - docker_compose_file_stat.stat.exists
+  register: docker_compose_result
+  changed_when: "'Creating' in docker_compose_result.stdout or 'Starting' in docker_compose_result.stdout"
+
+- name: Display Docker Compose services status
+  command: docker compose ps
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_check.rc == 0
+    - docker_compose_file_stat.stat.exists
+  register: docker_ps_result
+  changed_when: false
+  failed_when: false
+
+- name: Show Docker Compose status
+  debug:
+    var: docker_ps_result.stdout_lines
+  when:
+    - docker_enabled | default(true) | bool
+    - docker_check.rc == 0
+    - docker_ps_result is defined
+    - docker_ps_result.stdout_lines is defined
+
+- name: Docker Compose not deployed yet
+  debug:
+    msg: "Docker is installed but no docker-compose.yml found. Deploy manually to {{ docker_compose_dir | default('/opt/webapps') }}/docker-compose.yml"
+  when:
+    - docker_enabled | default(true) | bool
+    - not docker_compose_file_stat.stat.exists

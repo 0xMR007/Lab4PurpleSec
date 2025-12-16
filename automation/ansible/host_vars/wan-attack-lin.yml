@@ -1,0 +1,17 @@
+# ============================================================================
+# Host Variables - WAN-ATTACK-LIN
+# ============================================================================
+# Variables specific to the WAN attack machine (Kali Linux)
+# ============================================================================
+
+---
+hostname: "WAN-ATTACK-LIN"
+ip_address: "{{ wan_attack_ip | default('dhcp') }}"
+network_interface: "eth0"  # Bridged network
+
+# Docker (optional, can be enabled for testing)
+linux_base_install_docker: false
+
+# Firewall (disabled by default for attack machine)
+linux_base_configure_firewall: false
+

@@ -1,0 +1,20 @@
+# ============================================================================
+# Desktop GUI Role - Handlers
+# ============================================================================
+# Handlers for the desktop-gui role
+# ============================================================================
+
+---
+- name: restart gdm3
+  systemd:
+    name: gdm3
+    state: restarted
+  become: yes
+  ignore_errors: yes
+
+- name: restart lightdm
+  systemd:
+    name: lightdm
+    state: restarted
+  become: yes
+  ignore_errors: yes

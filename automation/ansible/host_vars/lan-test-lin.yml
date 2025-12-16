@@ -1,0 +1,34 @@
+# ============================================================================
+# Host Variables - LAN-TEST-LIN
+# ============================================================================
+# Variables specific to the test machine
+# ============================================================================
+
+---
+hostname: "LAN-TEST-LIN"
+ip_address: "192.168.10.100"
+network_interface: "eth1"
+
+# Docker (optional, can be enabled for testing)
+linux_base_install_docker: false
+
+# Firewall (disabled by default)
+linux_base_configure_firewall: false
+
+# Desktop GUI configuration
+desktop_gui_enabled: true
+desktop_gui_environment: "gnome-minimal"
+desktop_gui_autologin_enabled: true
+desktop_gui_autologin_user: "vagrant"
+desktop_gui_install_apps: true
+
+# Hosts file configuration (minimal for realism)
+hosts_file_enabled: true
+hosts_file_entries:
+  # LAN hosts
+  - ip: "192.168.10.30"
+    hostnames:
+      - "dc01"
+  - ip: "192.168.10.31"
+    hostnames:
+      - "ws01"

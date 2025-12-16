@@ -1,0 +1,34 @@
+# ============================================================================
+# Windows Base Role - Default Variables
+# ============================================================================
+# Default variables for the windows-base role
+# ============================================================================
+#
+# NOTE: This role is a placeholder for future Windows VM support.
+# Currently, Windows VMs (GOAD) are managed externally.
+# ============================================================================
+
+---
+# WinRM configuration
+windows_base_configure_winrm: true
+windows_base_winrm_port: 5985
+windows_base_winrm_https_port: 5986
+windows_base_winrm_https: false  # Enable HTTPS listener
+
+# Windows updates
+windows_base_install_updates: false  # Set to true to enable Windows Update
+                                     # WARNING: This can take a long time and may require reboot
+
+# PowerShell execution policy
+windows_base_powershell_execution_policy: "RemoteSigned"
+
+# Chocolatey package manager
+windows_base_install_chocolatey: false  # Set to true to install Chocolatey
+
+# Common Windows packages (via Chocolatey, if enabled)
+windows_base_packages: []
+# Example:
+# windows_base_packages:
+#   - git
+#   - vscode
+#   - 7zip

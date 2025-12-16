@@ -1,0 +1,68 @@
+# ============================================================================
+# Suricata Role - Main Tasks
+# ============================================================================
+# This role installs and configures Suricata IDS/IPS.
+#
+# NOTE: Suricata is typically installed on pfSense, not on VMs.
+# This role is provided for potential VM-based Suricata deployment
+# or for testing purposes.
+# ============================================================================
+
+---
+- name: Install Suricata
+  package:
+    name: suricata
+    state: present
+  become: yes
+  when: suricata_enabled | default(false) | bool
+
+- name: Ensure Suricata configuration directory exists
+  file:
+    path: "{{ suricata_config_path | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: yes
+  when: suricata_enabled | default(false) | bool
+
+- name: Deploy Suricata configuration
+  template:
+    src: suricata.yaml.j2
+    dest: "{{ suricata_config_path }}"
+    backup: yes
+    mode: '0644'
+  become: yes
+  when:
+    - suricata_enabled | default(false) | bool
+    - suricata_config_template is defined
+  notify: restart suricata
+
+- name: Deploy Suricata configuration from file
+  copy:
+    src: "{{ suricata_config_file }}"
+    dest: "{{ suricata_config_path }}"
+    backup: yes
+    mode: '0644'
+  become: yes
+  when:
+    - suricata_enabled | default(false) | bool
+    - suricata_config_file is defined
+    - suricata_config_template is not defined
+  notify: restart suricata
+
+- name: Update Suricata rules
+  command: suricata-update
+  become: yes
+  when:
+    - suricata_enabled | default(false) | bool
+    - suricata_update_rules | default(true) | bool
+  changed_when: true
+
+- name: Ensure Suricata service is running
+  systemd:
+    name: suricata
+    enabled: yes
+    state: started
+  become: yes
+  when: suricata_enabled | default(false) | bool

@@ -1,0 +1,25 @@
+# ============================================================================
+# Hosts File Role - Default Variables
+# ============================================================================
+
+---
+# Enable/disable hosts file configuration
+hosts_file_enabled: true
+
+# Backup existing /etc/hosts before modification
+hosts_file_backup: true
+
+# Cleanup old entries
+hosts_file_cleanup: false
+
+# Hosts file entries
+# Structure:
+#   - ip: "192.168.10.100"
+#     hostnames:
+#       - "test.lab"
+#       - "LAN-TEST-LIN"
+hosts_file_entries: []
+
+# Entries to remove (if cleanup is enabled)
+hosts_file_remove: []
+

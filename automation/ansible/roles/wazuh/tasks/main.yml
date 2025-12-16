@@ -1,0 +1,253 @@
+# ============================================================================
+# Wazuh Role - Main Tasks
+# ============================================================================
+# This role installs and configures Wazuh Manager and agents.
+# Used on LAN-SIEM-LIN for centralized logging and monitoring.
+#
+# NOTE: Wazuh installation requires significant resources (4GB+ RAM recommended)
+# ============================================================================
+
+---
+- name: Check system resources
+  fail:
+    msg: "Wazuh requires at least 4GB RAM. Current system may not have enough resources."
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - ansible_memtotal_mb is defined
+    - ansible_memtotal_mb < 4096
+
+- name: Check if Wazuh is already installed
+  stat:
+    path: /var/ossec/bin/wazuh-control
+  register: wazuh_installed
+  when: wazuh_manager_enabled | default(false) | bool
+
+- name: Download Wazuh installation script
+  get_url:
+    url: "https://packages.wazuh.com/{{ wazuh_version | default('4.14') }}/wazuh-install.sh"
+    dest: /tmp/wazuh-install.sh
+    mode: "0755"
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - not wazuh_installed.stat.exists
+
+- name: Install Wazuh Manager (all components)
+  shell: bash /tmp/wazuh-install.sh -a 2>&1 | tee /root/wazuh-install-output.log
+  args:
+    creates: /var/ossec/bin/wazuh-control
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - not wazuh_installed.stat.exists
+  register: wazuh_install_result
+  async: 1200 # 20 minutes timeout
+  poll: 30
+
+- name: Wait for Wazuh installation to complete
+  wait_for:
+    path: /var/ossec/bin/wazuh-control
+    timeout: 1200
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - not wazuh_installed.stat.exists
+    - wazuh_install_result is defined
+
+- name: Move wazuh-install-files.tar to /root
+  shell: |
+    if [ -f /tmp/wazuh-install-files.tar ]; then
+      mv /tmp/wazuh-install-files.tar /root/
+      chmod 600 /root/wazuh-install-files.tar
+    fi
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_install_result is changed
+  ignore_errors: yes
+
+- name: Extract passwords from tar archive
+  shell: |
+    if [ -f /root/wazuh-install-files.tar ]; then
+      tar -xf /root/wazuh-install-files.tar -C /root 2>/dev/null || true
+      chmod 600 /root/wazuh-install-files/wazuh-passwords.txt 2>/dev/null || true
+    fi
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_install_result is changed
+  ignore_errors: yes
+
+- name: Display Wazuh credentials information
+  debug:
+    msg: |
+      ================================================================================
+      Wazuh installed successfully!
+
+      To view credentials, use ONE of these commands:
+
+      1. From extracted passwords file (RECOMMENDED):
+         sudo cat /root/wazuh-install-files/wazuh-passwords.txt
+
+      2. From tar archive:
+         sudo tar -xf /root/wazuh-install-files.tar -C /tmp
+         sudo cat /tmp/wazuh-install-files/wazuh-passwords.txt
+
+      3. From installation log:
+         sudo cat /var/log/wazuh-install.log | grep -A 20 "password"
+
+      4. From installation output:
+         sudo cat /root/wazuh-install-output.log | grep -A 20 "password"
+
+      Dashboard URL: https://{{ ansible_default_ipv4.address }}/
+      Default User: admin
+      ================================================================================
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_install_result is changed
+
+- name: Clean up installation script
+  file:
+    path: /tmp/wazuh-install.sh
+    state: absent
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_install_result is defined
+
+- name: Install Wazuh Agent
+  get_url:
+    url: "https://packages.wazuh.com/{{ wazuh_version | default('4.14') }}/wazuh-install.sh"
+    dest: /tmp/wazuh-agent-install.sh
+    mode: "0755"
+  become: yes
+  when: wazuh_agent_enabled | default(false) | bool
+
+- name: Run Wazuh Agent installation script
+  shell: bash /tmp/wazuh-agent-install.sh -i
+  args:
+    creates: /var/ossec/bin/wazuh-control
+  become: yes
+  when: wazuh_agent_enabled | default(false) | bool
+  notify: restart wazuh-agent
+
+- name: Clean up agent installation script
+  file:
+    path: /tmp/wazuh-agent-install.sh
+    state: absent
+  become: yes
+  when: wazuh_agent_enabled | default(false) | bool
+
+- name: Configure Wazuh Manager (optional, requires template)
+  template:
+    src: ossec.conf.j2
+    dest: /var/ossec/etc/ossec.conf
+    backup: yes
+    mode: "0640"
+    owner: root
+    group: ossec
+  become: yes
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_manager_config is defined
+    - wazuh_manager_config is not none
+    - wazuh_manager_config | default([]) | length > 0
+  notify: restart wazuh-manager
+  ignore_errors: yes # Template may not exist
+
+- name: Configure Wazuh Agent (optional, requires template)
+  template:
+    src: ossec-agent.conf.j2
+    dest: /var/ossec/etc/ossec.conf
+    backup: yes
+    mode: "0640"
+    owner: root
+    group: ossec
+  become: yes
+  when:
+    - wazuh_agent_enabled | default(false) | bool
+    - wazuh_agent_config is defined
+    - wazuh_agent_config is not none
+    - wazuh_agent_config | default([]) | length > 0
+  notify: restart wazuh-agent
+  ignore_errors: yes # Template may not exist
+
+- name: Set Wazuh Agent manager address
+  lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: "^[[:space:]]*<address>"
+    line: "    <address>{{ wazuh_manager_ip }}</address>"
+    backup: yes
+  become: yes
+  when:
+    - wazuh_agent_enabled | default(false) | bool
+    - wazuh_manager_ip is defined
+
+- name: Set Wazuh Agent name
+  lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: "^[[:space:]]*<name>"
+    line: "    <name>{{ wazuh_agent_name }}</name>"
+    backup: yes
+  become: yes
+  when:
+    - wazuh_agent_enabled | default(false) | bool
+    - wazuh_agent_name is defined
+
+- name: Install Wazuh Dashboard (if enabled)
+  package:
+    name: wazuh-dashboard
+    state: present
+  become: yes
+  when:
+    - wazuh_dashboard_enabled | default(false) | bool
+    - wazuh_manager_enabled | default(false) | bool
+  notify: restart wazuh-dashboard
+
+- name: Configure Wazuh Dashboard (optional, requires template)
+  template:
+    src: opensearch_dashboards.yml.j2
+    dest: /etc/wazuh-dashboard/opensearch_dashboards.yml
+    backup: yes
+    mode: "0644"
+  become: yes
+  when:
+    - wazuh_dashboard_enabled | default(false) | bool
+    - wazuh_dashboard_config is defined
+    - wazuh_dashboard_config is not none
+    - wazuh_dashboard_config | default([]) | length > 0
+  notify: restart wazuh-dashboard
+  ignore_errors: yes # Template may not exist
+
+- name: Ensure Wazuh Manager service is running
+  systemd:
+    name: wazuh-manager
+    enabled: yes
+    state: started
+  become: yes
+  when: wazuh_manager_enabled | default(false) | bool
+
+- name: Ensure Wazuh Agent service is running
+  systemd:
+    name: wazuh-agent
+    enabled: yes
+    state: started
+  become: yes
+  when: wazuh_agent_enabled | default(false) | bool
+
+- name: Ensure Wazuh Dashboard service is running
+  systemd:
+    name: wazuh-dashboard
+    enabled: yes
+    state: started
+  become: yes
+  when: wazuh_dashboard_enabled | default(false) | bool
+
+- name: Wait for Wazuh Manager to be ready
+  wait_for:
+    port: "{{ wazuh_manager_port | default(1514) }}"
+    host: "{{ wazuh_manager_ip | default('localhost') }}"
+    delay: 10
+    timeout: 60
+  when:
+    - wazuh_manager_enabled | default(false) | bool
+    - wazuh_wait_for_manager | default(true) | bool

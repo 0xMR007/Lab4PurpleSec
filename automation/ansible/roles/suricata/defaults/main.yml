@@ -1,0 +1,29 @@
+# ============================================================================
+# Suricata Role - Default Variables
+# ============================================================================
+# Default variables for the suricata role
+# ============================================================================
+
+---
+# Enable/disable Suricata
+suricata_enabled: false
+
+# Suricata version
+suricata_version: "latest"
+
+# Suricata configuration
+suricata_config_path: "/etc/suricata/suricata.yaml"
+suricata_rules_path: "/etc/suricata/rules"
+
+# Configuration file or template
+suricata_config_file: null
+suricata_config_template: null
+
+# Network interfaces to monitor
+suricata_interfaces: []
+
+# Rule sources
+suricata_rule_sources: []
+
+# Update rules on deployment
+suricata_update_rules: true

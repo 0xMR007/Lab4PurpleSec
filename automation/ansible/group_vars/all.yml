@@ -1,0 +1,48 @@
+# ============================================================================
+# Group Variables - All Hosts
+# ============================================================================
+# Global variables applied to all hosts
+# ============================================================================
+
+---
+# Network configuration
+network_dns_servers:
+  - "8.8.8.8"
+  - "8.8.4.4"
+
+# Timezone
+timezone: "UTC"
+common_timezone: "UTC"
+
+# NTP servers
+common_ntp_servers:
+  - "pool.ntp.org"
+  - "time.google.com"
+
+# Common packages
+common_packages:
+  - curl
+  - wget
+  - git
+  - vim
+  - htop
+  - unzip
+  - netcat-openbsd
+
+# SSH configuration
+ssh_permit_root_login: false
+common_ssh_permit_root_login: false
+common_ssh_password_authentication: true
+
+# Ansible user
+ansible_user: vagrant
+
+# Common hosts file entries (minimal for realism)
+# Only essential infrastructure entries
+common_hosts_entries:
+  - ip: "192.168.10.1"
+    hostnames:
+      - "gateway"
+  - ip: "192.168.10.104"
+    hostnames:
+      - "siem"

@@ -1,0 +1,24 @@
+# ============================================================================
+# Wazuh Role - Handlers
+# ============================================================================
+# Handlers for the wazuh role
+# ============================================================================
+
+---
+- name: restart wazuh-manager
+  systemd:
+    name: wazuh-manager
+    state: restarted
+  become: yes
+
+- name: restart wazuh-agent
+  systemd:
+    name: wazuh-agent
+    state: restarted
+  become: yes
+
+- name: restart wazuh-dashboard
+  systemd:
+    name: wazuh-dashboard
+    state: restarted
+  become: yes

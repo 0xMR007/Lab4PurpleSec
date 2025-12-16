@@ -1,0 +1,24 @@
+# ============================================================================
+# Common Role - Handlers
+# ============================================================================
+# Handlers for the common role (service restarts, etc.)
+# ============================================================================
+
+---
+- name: restart sshd
+  systemd:
+    name: "{{ 'ssh' if ansible_os_family == 'Debian' else 'sshd' }}"
+    state: restarted
+  become: yes
+
+- name: restart systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    state: restarted
+  become: yes
+
+- name: restart chronyd
+  systemd:
+    name: chronyd
+    state: restarted
+  become: yes

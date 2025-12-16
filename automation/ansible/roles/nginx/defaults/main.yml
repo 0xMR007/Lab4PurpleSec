@@ -1,0 +1,42 @@
+# ============================================================================
+# Nginx Role - Default Variables
+# ============================================================================
+# Default variables for the nginx role
+# ============================================================================
+
+---
+# Enable/disable Nginx
+nginx_enabled: true
+
+# Nginx version
+nginx_version: "latest"
+
+# Configuration paths
+nginx_config_path: "/etc/nginx/nginx.conf"
+nginx_sites_available: "/etc/nginx/sites-available"
+nginx_sites_enabled: "/etc/nginx/sites-enabled"
+
+# Backup existing config before deployment
+nginx_backup_config: true
+
+# Virtual hosts configuration
+# Structure:
+#   - name: "juice.lab"
+#     server_name: "juice.lab"
+#     upstream: "juice-shop:3000"
+#     listen: 80
+#     ssl_enabled: false
+nginx_virtual_hosts: []
+
+# Alternative: Use existing config file
+# Path to nginx.conf file to copy (relative to playbook or absolute)
+nginx_config_file: null
+
+# Alternative: Use template
+# Template name for nginx.conf (must be in templates/)
+nginx_config_template: null
+
+# SSL/TLS configuration
+nginx_enable_ssl: false
+nginx_ssl_cert_path: "/etc/nginx/ssl/cert.pem"
+nginx_ssl_key_path: "/etc/nginx/ssl/key.pem"

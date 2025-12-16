@@ -1,0 +1,22 @@
+# ============================================================================
+# Nginx Role - Handlers
+# ============================================================================
+# Handlers for the nginx role
+# ============================================================================
+
+---
+# Handlers will be implemented in Phase F
+# Placeholder structure
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+  listen: nginx_reload
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+  listen: nginx_restart
+

@@ -1,0 +1,25 @@
+# Virtual host configuration for {{ item.name }}
+server {
+    listen {{ item.listen | default(80) }};
+    server_name {{ item.server_name }};
+
+{% if item.ssl_enabled | default(false) %}
+    ssl_certificate {{ item.ssl_cert }};
+    ssl_certificate_key {{ item.ssl_key }};
+{% endif %}
+
+    location / {
+        proxy_pass http://{{ item.upstream }}{{ item.path | default('') }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+{% if item.proxy_cookie_path is defined %}
+        proxy_cookie_path {{ item.proxy_cookie_path }};
+{% endif %}
+{% if item.proxy_redirect is defined %}
+        proxy_redirect {{ item.proxy_redirect }};
+{% endif %}
+    }
+}
+

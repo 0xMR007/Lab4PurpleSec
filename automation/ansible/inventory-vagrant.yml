@@ -1,0 +1,72 @@
+# ============================================================================
+# Lab4PurpleSec - Vagrant Inventory (Static - Port Forwarding)
+# ============================================================================
+# This inventory uses Vagrant's port forwarding (127.0.0.1:port) instead
+# of static IPs, which works better when VMs are on internal networks.
+#
+# NOTE: Port numbers may vary. Check with: vagrant ssh-config
+# ============================================================================
+
+all:
+  children:
+    dmz:
+      hosts:
+        dmz-web01-lin:
+          # Use Vagrant port forwarding instead of static IP
+          # Check actual port with: vagrant ssh-config dmz-web01-lin | grep Port
+          ansible_host: 127.0.0.1
+          ansible_port: 2200  # May vary - check with vagrant ssh-config
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+
+    lan:
+      hosts:
+        lan-siem-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2201  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        lan-test-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2202  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        lan-attack-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2203  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+
+    wan:
+      hosts:
+        wan-attack-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2204  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+
+    web_servers:
+      hosts:
+        dmz-web01-lin:
+
+    siem:
+      hosts:
+        lan-siem-lin:
+
+    attack_machines:
+      hosts:
+        lan-attack-lin:
+        wan-attack-lin:
+
+# ============================================================================
+# To get actual ports, run: vagrant ssh-config
+# Then update the port numbers above if they differ
+# ============================================================================
+
+
+

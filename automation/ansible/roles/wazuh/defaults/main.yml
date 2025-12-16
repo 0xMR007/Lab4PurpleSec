@@ -1,0 +1,38 @@
+# ============================================================================
+# Wazuh Role - Default Variables
+# ============================================================================
+# Default variables for the wazuh role
+# ============================================================================
+
+---
+# Wazuh Manager configuration
+wazuh_manager_enabled: false
+wazuh_manager_ip: "192.168.10.104"
+wazuh_manager_port: 1514
+wazuh_manager_port_udp: 1515
+
+# Wazuh version
+wazuh_version: "4.7"  # Can be overridden in host_vars (e.g., "4.14")
+
+# Wazuh Agent configuration
+wazuh_agent_enabled: false
+wazuh_agent_name: "{{ inventory_hostname }}"
+
+# Wazuh Dashboard
+wazuh_dashboard_enabled: false
+wazuh_dashboard_port: 443
+wazuh_dashboard_host: "0.0.0.0"
+
+# Wait for manager to be ready
+wazuh_wait_for_manager: true
+
+# Integration settings
+wazuh_integrate_suricata: false
+wazuh_suricata_log_path: "/var/log/suricata/eve.json"
+
+# Wazuh configuration templates (optional)
+# If defined, these will be used instead of default configuration
+# Set to empty dict {} or list [] to use templates, or leave as null to skip
+wazuh_manager_config: null
+wazuh_agent_config: null
+wazuh_dashboard_config: null

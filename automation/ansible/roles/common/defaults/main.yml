@@ -1,0 +1,38 @@
+# ============================================================================
+# Common Role - Default Variables
+# ============================================================================
+# Default variables for the common role
+# ============================================================================
+
+---
+# Timezone configuration
+common_timezone: "UTC"
+
+# NTP servers
+common_ntp_servers:
+  - "pool.ntp.org"
+  - "time.google.com"
+
+# Common packages to install
+common_packages:
+  - curl
+  - wget
+  - git
+  - vim
+  - htop
+  - unzip
+  - netcat-openbsd
+
+# Users to create
+# Structure:
+#   - name: "username"
+#     groups: ["sudo", "docker"]
+#     shell: "/bin/bash"
+#     ssh_keys:
+#       - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB..."
+common_users: []
+
+# SSH configuration
+common_ssh_permit_root_login: false
+common_ssh_password_authentication: true
+

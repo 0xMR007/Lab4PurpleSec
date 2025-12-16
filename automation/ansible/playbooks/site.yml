@@ -1,0 +1,55 @@
+# ============================================================================
+# Lab4PurpleSec - Main Ansible Playbook
+# ============================================================================
+# This is the main playbook that orchestrates the configuration of all
+# internal VMs in the Lab4PurpleSec environment.
+#
+# External VMs (GOAD, Metasploitable3) are NOT managed by this playbook.
+#
+# Usage:
+#   ansible-playbook -i ../inventory.yml playbooks/site.yml
+#   Or via Vagrant: vagrant provision
+# ============================================================================
+
+---
+- name: Base system configuration for all hosts
+  hosts: all
+  become: yes
+  roles:
+    - common
+    - linux-base
+    - hosts-file
+
+- name: Web server configuration
+  hosts: web_servers
+  become: yes
+  roles:
+    - docker
+    # Note: Nginx is deployed inside Docker container, not on host
+
+- name: SIEM configuration
+  hosts: siem
+  become: yes
+  roles:
+    - wazuh
+
+- name: Desktop GUI configuration
+  hosts: test_machines
+  become: yes
+  roles:
+    - desktop-gui
+
+- name: Wazuh agent deployment
+  hosts: "{{ wazuh_agent_hosts | default('!all') }}"
+  become: yes
+  roles:
+    - role: wazuh
+      vars:
+        wazuh_manager_enabled: false
+        wazuh_agent_enabled: true
+  # Skip this play if wazuh_agent_hosts is not defined or empty
+  # Using '!all' ensures no hosts match if variable is not set
+
+# ============================================================================
+# Note: Application roles are now implemented in Phase F
+# ============================================================================

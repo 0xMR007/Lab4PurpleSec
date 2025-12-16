@@ -1,0 +1,168 @@
+# ============================================================================
+# Desktop GUI Role - Main Tasks
+# ============================================================================
+# This role installs a graphical desktop environment (Gnome, KDE, XFCE, etc.)
+# Optimized for virtual machine environments
+# ============================================================================
+
+---
+- name: Check if desktop GUI is enabled
+  debug:
+    msg: "Desktop GUI installation is {{ 'enabled' if desktop_gui_enabled else 'disabled' }}"
+
+- name: Update package cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: yes
+  when: desktop_gui_enabled | bool
+
+- name: Install Gnome Desktop (minimal)
+  apt:
+    name:
+      - ubuntu-desktop-minimal
+      - gnome-shell
+      - gnome-session
+      - gdm3
+    state: present
+    install_recommends: no
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_environment == "gnome-minimal"
+  register: gnome_install
+  async: 1800 # 30 minutes timeout
+  poll: 30 # Check every 30 seconds
+
+- name: Install Gnome Desktop (full)
+  apt:
+    name:
+      - ubuntu-desktop
+    state: present
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_environment == "gnome"
+  register: gnome_full_install
+  async: 2400 # 40 minutes timeout
+  poll: 30
+
+- name: Install XFCE Desktop
+  apt:
+    name:
+      - xubuntu-desktop
+    state: present
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_environment == "xfce"
+
+- name: Install additional GUI applications
+  apt:
+    name: "{{ desktop_gui_extra_packages }}"
+    state: present
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_install_apps | bool
+    - desktop_gui_extra_packages | length > 0
+
+- name: Configure GDM3 for auto-login
+  ini_file:
+    path: /etc/gdm3/custom.conf
+    section: daemon
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0644"
+  become: yes
+  loop:
+    - { option: "AutomaticLoginEnable", value: "true" }
+    - { option: "AutomaticLogin", value: "{{ desktop_gui_autologin_user }}" }
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_autologin_enabled | bool
+    - desktop_gui_display_manager == "gdm3"
+  notify: restart gdm3
+
+- name: Disable Wayland (use X11 for better compatibility)
+  lineinfile:
+    path: /etc/gdm3/custom.conf
+    regexp: "^#?WaylandEnable="
+    line: "WaylandEnable=false"
+    state: present
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_display_manager == "gdm3"
+  notify: restart gdm3
+
+- name: Disable GNOME tracker (file indexing) for performance
+  file:
+    path: "/home/{{ desktop_gui_autologin_user }}/.config/autostart/tracker-miner-fs-3.desktop"
+    state: touch
+    mode: "0644"
+    owner: "{{ desktop_gui_autologin_user }}"
+    group: "{{ desktop_gui_autologin_user }}"
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_disable_tracker | bool
+  ignore_errors: yes
+
+- name: Create dconf directory for user settings
+  file:
+    path: "/home/{{ desktop_gui_autologin_user }}/.config/dconf"
+    state: directory
+    owner: "{{ desktop_gui_autologin_user }}"
+    group: "{{ desktop_gui_autologin_user }}"
+    mode: "0755"
+  become: yes
+  when: desktop_gui_enabled | bool
+
+- name: Disable GNOME animations for better VM performance
+  become: yes
+  become_user: "{{ desktop_gui_autologin_user }}"
+  command: gsettings set org.gnome.desktop.interface enable-animations false
+  when:
+    - desktop_gui_enabled | bool
+    - desktop_gui_disable_animations | bool
+  changed_when: false
+  failed_when: false
+
+- name: Set system graphical target
+  systemd:
+    name: graphical.target
+    enabled: yes
+  become: yes
+  when: desktop_gui_enabled | bool
+
+- name: Set default systemd target to graphical
+  file:
+    src: /lib/systemd/system/graphical.target
+    dest: /etc/systemd/system/default.target
+    state: link
+    force: yes
+  become: yes
+  when: desktop_gui_enabled | bool
+
+- name: Install VirtualBox Guest Additions dependencies
+  apt:
+    name:
+      - build-essential
+      - dkms
+      - linux-headers-generic
+    state: present
+  become: yes
+  when:
+    - desktop_gui_enabled | bool
+    - ansible_virtualization_type == "virtualbox"
+
+- name: Display installation status
+  debug:
+    msg: >
+      Desktop GUI installation completed.
+      Please reboot the VM to start the graphical environment.
+      Use 'sudo reboot' or 'vagrant reload {{ inventory_hostname }}'
+  when:
+    - desktop_gui_enabled | bool
+    - gnome_install is changed or gnome_full_install is changed

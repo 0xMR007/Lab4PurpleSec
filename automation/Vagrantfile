@@ -1,0 +1,326 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# ============================================================================
+# Lab4PurpleSec - Vagrantfile
+# ============================================================================
+# This Vagrantfile provisions only the INTERNAL VMs that are not managed
+# by external repositories (GOAD, Metasploitable3).
+#
+# External VMs (GOAD, Metasploitable3) must be launched separately using
+# their own repositories. See ORCHESTRATION.md for details.
+#
+# NOTE: pfSense is NOT provisioned via this Vagrantfile.
+#       See ../docs/SETUP/pfsense_setup.md for manual pfSense installation.
+#
+# Configuration:
+#   - Default provider: VirtualBox
+#   - Networks: lab-lan (192.168.10.0/24), lab-dmz (192.168.20.0/24)
+#   - WAN: Bridged network (auto-detect)
+# ============================================================================
+
+VAGRANTFILE_API_VERSION = "2"
+
+# ============================================================================
+# Configuration Variables
+# ============================================================================
+# These variables can be overridden via environment variables:
+#   VAGRANT_MEMORY=4096 vagrant up dmz-web01-lin
+# ============================================================================
+
+# Provider selection (default: virtualbox)
+PROVIDER = ENV.fetch("VAGRANT_PROVIDER", "virtualbox")
+
+# Network configuration
+WAN_NETWORK = "192.168.1.0/24"    # Bridge to host (simulates Internet)
+LAN_NETWORK = "192.168.10.0/24"   # Internal network (LAN segment)
+DMZ_NETWORK = "192.168.20.0/24"   # Internal network (DMZ segment)
+
+# Internal network names (VirtualBox)
+LAN_INTNET = "lab-lan"
+DMZ_INTNET = "lab-dmz"
+
+# Default resource allocation
+DEFAULT_MEMORY = (ENV["VAGRANT_MEMORY"] || 2048).to_i
+DEFAULT_CPUS = (ENV["VAGRANT_CPUS"] || 2).to_i
+
+# Ansible provisioning (enabled by default)
+# Set VAGRANT_ANSIBLE=false to disable
+# Note: Windows is not officially supported for Ansible Control Machine
+# If on Windows, consider using WSL or set VAGRANT_ANSIBLE=false
+ansible_enabled = ENV.fetch("VAGRANT_ANSIBLE", "true") == "true"
+
+# Detect Windows and disable Ansible by default (can be overridden)
+if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+  ansible_enabled = ENV.fetch("VAGRANT_ANSIBLE", "false") == "true" unless ENV.key?("VAGRANT_ANSIBLE")
+end
+
+# ============================================================================
+# VM Configuration
+# ============================================================================
+# These are the INTERNAL VMs that will be provisioned by this Vagrantfile.
+# Each VM can have custom memory/CPU settings.
+#
+# Network segments:
+#   - "wan": Bridged network (public_network)
+#   - "lan": Internal network (lab-lan)
+#   - "dmz": Internal network (lab-dmz)
+# ============================================================================
+
+INTERNAL_VMS = {
+  "dmz-web01-lin" => {
+    :box => "debian/bookworm64",
+    :ip => "192.168.20.105",
+    :memory => 2048,
+    :cpus => 2,
+    :network => "dmz",
+    :hostname => "DMZ-WEB01-LIN",
+    :description => "Debian 12 web server with Docker and Nginx"
+  },
+  "lan-siem-lin" => {
+    :box => "ubuntu/jammy64",
+    :ip => "192.168.10.104",
+    :memory => 8096,
+    :cpus => 2,
+    :network => "lan",
+    :hostname => "LAN-SIEM-LIN",
+    :description => "Ubuntu 22.04 Wazuh Manager server"
+  },
+  "lan-test-lin" => {
+    :box => "ubuntu/jammy64",
+    :ip => "192.168.10.100",
+    :memory => 6144,
+    :cpus => 2,
+    :network => "lan",
+    :hostname => "LAN-TEST-LIN",
+    :description => "Ubuntu 22.04 Desktop test machine with Gnome GUI",
+    :gui => true  # Enable GUI for desktop environment
+  },
+  "lan-attack-lin" => {
+    :box => "kalilinux/rolling",
+    :ip => "192.168.10.109",
+    :memory => 4096,
+    :cpus => 2,
+    :network => "lan",
+    :hostname => "LAN-ATTACK-LIN",
+    :description => "Kali Linux attack machine (LAN segment)"
+  },
+  "wan-attack-lin" => {
+    :box => "kalilinux/rolling",
+    :ip => nil,  # DHCP via bridged network
+    :memory => 4096,
+    :cpus => 2,
+    :network => "wan",
+    :hostname => "WAN-ATTACK-LIN",
+    :description => "Kali Linux attack machine (WAN segment, bridged)"
+  }
+}
+
+# ============================================================================
+# Helper Functions
+# ============================================================================
+
+def print_external_vm_info
+  puts "\n" + "="*70
+  puts "External VMs Information"
+  puts "="*70
+  puts "\nThe following VMs are NOT managed by this Vagrantfile:"
+  puts "\n1. GOAD MINILAB (LAN-DC01-WIN, LAN-WS01-WIN)"
+  puts "   Repository: https://github.com/Orange-Cyberdefense/GOAD"
+  puts "   Launch: cd <GOAD_REPO> && py goad.py -m vm"
+  puts "   See: automation/ORCHESTRATION.md"
+  puts "\n2. Metasploitable3 (DMZ-MS3-LIN, DMZ-MS3-WIN)"
+  puts "   Repository: https://github.com/rapid7/metasploitable3"
+  puts "   Launch: cd <MS3_REPO> && vagrant up"
+  puts "   See: automation/ORCHESTRATION.md"
+  puts "\n3. Metasploitable2 (DMZ-MS2-LIN)"
+  puts "   Download: https://www.rapid7.com/products/metasploit/metasploitable/"
+  puts "   Manual: Open VMX file in VirtualBox/VMware"
+  puts "   See: automation/ORCHESTRATION.md"
+  puts "\n4. pfSense (FW-PFSENSE)"
+  puts "   Manual installation from ISO"
+  puts "   See: automation/ORCHESTRATION.md and ../docs/SETUP/pfsense_setup.md"
+  puts "\n" + "="*70 + "\n"
+end
+
+# ============================================================================
+# Vagrant Configuration
+# ============================================================================
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # ========================================================================
+  # Global Configuration
+  # ========================================================================
+  
+  # Disable vagrant-vbguest plugin to avoid Guest Additions issues
+  # If you need Guest Additions, install them manually or use a box with matching version
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote = true
+  end
+  
+  # Provider-specific global settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    # Don't show GUI by default (can be enabled per VM if needed)
+  end
+
+  # VMware provider (if plugin installed)
+  config.vm.provider "vmware_desktop" do |vmware|
+    vmware.gui = false
+    vmware.vmx["displayName"] = nil  # Will be set per VM
+  end
+
+  # ========================================================================
+  # Internal VMs Configuration
+  # ========================================================================
+  
+  INTERNAL_VMS.each do |vm_name, settings|
+    config.vm.define vm_name do |vm|
+      # Box configuration
+      vm.vm.box = settings[:box]
+      vm.vm.hostname = settings[:hostname]
+
+      # Network configuration based on segment
+      case settings[:network]
+      when "wan"
+        # WAN: Bridged network (simulates Internet connection)
+        # This allows the VM to access the host network directly
+        vm.vm.network "public_network", 
+          bridge: ENV.fetch("VAGRANT_BRIDGE", "auto"),
+          auto_config: true
+      when "lan"
+        # LAN: Internal network (isolated from host)
+        # All LAN VMs can communicate with each other and pfSense gateway
+        vm.vm.network "private_network", 
+          ip: settings[:ip],
+          virtualbox__intnet: LAN_INTNET,
+          auto_config: true
+      when "dmz"
+        # DMZ: Internal network (isolated from host)
+        # All DMZ VMs can communicate with each other and pfSense gateway
+        vm.vm.network "private_network", 
+          ip: settings[:ip],
+          virtualbox__intnet: DMZ_INTNET,
+          auto_config: true
+      end
+
+      # Provider-specific resource allocation
+      vm.vm.provider "virtualbox" do |vb|
+        vb.name = settings[:hostname]
+        vb.memory = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_MEMORY"] || settings[:memory]).to_i
+        vb.cpus = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_CPUS"] || settings[:cpus]).to_i
+        
+        # Enable GUI if specified in VM settings
+        vb.gui = settings[:gui] || false
+        
+        # Optional: Enable audio (not needed for lab)
+        vb.customize ["modifyvm", :id, "--audio", "none"]
+        
+        # Optional: Disable USB (not needed for lab)
+        vb.customize ["modifyvm", :id, "--usb", "off"]
+        
+        # Fix for WSL/Windows: Disable UART to avoid /dev/null issues
+        vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+      end
+
+      # VMware provider configuration (if plugin installed)
+      vm.vm.provider "vmware_desktop" do |vmware|
+        vmware.vmx["displayName"] = settings[:hostname]
+        vmware.vmx["memsize"] = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_MEMORY"] || settings[:memory]).to_i
+        vmware.vmx["numvcpus"] = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_CPUS"] || settings[:cpus]).to_i
+        vmware.vmx["gui"] = "FALSE"
+      end
+
+      # ====================================================================
+      # Provisioning
+      # ====================================================================
+      
+      # Ansible provisioning (enabled by default)
+      # To disable: Set VAGRANT_ANSIBLE=false
+      # Note: On Windows, Ansible is disabled by default (use WSL or set VAGRANT_ANSIBLE=true)
+      # Note: dmz-web01-lin is excluded from Ansible provisioning (manual setup preferred)
+      if ansible_enabled && vm_name != "dmz-web01-lin"
+        # Step 1: Install Ansible via apt (not pip) to avoid PEP 668 issues
+        # This bootstrap script installs Ansible from distribution repositories
+        vm.vm.provision "shell", 
+          name: "bootstrap-ansible",
+          path: "scripts/bootstrap-ansible.sh",
+          privileged: true
+        
+        # Step 2: Run Ansible playbooks with ansible_local
+        vm.vm.provision "ansible_local" do |ansible|
+          # Paths are relative to /vagrant (the mounted automation directory)
+          ansible.playbook = "ansible/playbooks/site.yml"
+          ansible.inventory_path = "ansible/inventory-local.yml"
+          ansible.config_file = "ansible/ansible.cfg"
+          ansible.limit = vm_name
+          ansible.verbose = ENV.fetch("VAGRANT_ANSIBLE_VERBOSE", "false") == "true" ? "v" : false
+          ansible.extra_vars = {
+            ansible_user: "vagrant"
+          }
+          # Don't install Ansible via pip - already installed via bootstrap script
+          ansible.install = false
+          # Set compatibility mode for Windows
+          ansible.compatibility_mode = "2.0" if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+        end
+      end
+
+      # Optional: Shell provisioning for basic setup
+      # This can be used for quick fixes or pre-Ansible setup
+      # vm.vm.provision "shell", inline: <<-SHELL
+      #   echo "Pre-provisioning setup for #{settings[:hostname]}"
+      # SHELL
+    end
+  end
+
+  # ========================================================================
+  # Hooks and Triggers
+  # ========================================================================
+  
+  # Display external VM information after 'vagrant up'
+  config.trigger.after :up do |trigger|
+    trigger.info = "Displaying external VMs information..."
+    trigger.run = {inline: "echo 'See automation/ORCHESTRATION.md for external VM setup'"}
+  end
+
+  # Optional: Display external VM info on 'vagrant status'
+  # This can be enabled if you want to see external VM status hints
+end
+
+# ============================================================================
+# External VMs Integration Documentation
+# ============================================================================
+# The following VMs are managed by external repositories and must be
+# launched separately. This Vagrantfile does NOT manage them.
+#
+# 1. GOAD MINILAB (LAN-DC01-WIN, LAN-WS01-WIN)
+#    - Repository: https://github.com/Orange-Cyberdefense/GOAD
+#    - Launch: cd <GOAD_REPO> && py goad.py -m vm
+#    - Network: Configure to use 'lab-lan' internal network
+#    - IPs: DC01=192.168.10.30, WS01=192.168.10.31
+#    - See: automation/ORCHESTRATION.md
+#
+# 2. Metasploitable3 (DMZ-MS3-LIN, DMZ-MS3-WIN)
+#    - Repository: https://github.com/rapid7/metasploitable3
+#    - Launch: cd <MS3_REPO> && vagrant up
+#    - Network: Configure to use 'lab-dmz' internal network
+#    - IPs: MS3-LIN=192.168.20.106, MS3-WIN=192.168.20.107
+#    - See: automation/ORCHESTRATION.md
+#
+# 3. Metasploitable2 (DMZ-MS2-LIN)
+#    - Download: https://www.rapid7.com/products/metasploit/metasploitable/
+#    - Manual: Open VMX file in VirtualBox/VMware
+#    - Network: Configure to use 'lab-dmz' internal network
+#    - IP: 192.168.20.104
+#    - See: automation/ORCHESTRATION.md
+#
+# 4. pfSense (FW-PFSENSE)
+#    - Manual installation from ISO
+#    - Network: 3 interfaces (WAN=bridged, LAN=lab-lan, DMZ=lab-dmz)
+#    - IPs: LAN=192.168.10.1/24, DMZ=192.168.20.1/24
+#    - See: automation/ORCHESTRATION.md and ../docs/SETUP/pfsense_setup.md
+#
+# IMPORTANT: pfSense must be started BEFORE other VMs to provide routing.
+#            See automation/ORCHESTRATION.md for deployment order.
+# ============================================================================

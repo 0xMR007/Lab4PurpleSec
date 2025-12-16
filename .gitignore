@@ -1,3 +1,4 @@
+# IDE files
 .vscode/
 
 # Log files
@@ -8,3 +9,20 @@
 *.backup
 *.tmp
 *.cache
+
+# Vagrant files
+.vagrant/
+*.retry
+
+# Ansible files
+.ansible/
+.vault_pass
+
+# Security files (keys, certificates, passwords)
+*.pem
+*.key
+id_rsa*
+*.crt
+*.csr
+*.p12
+*.pfx

@@ -1,6 +1,10 @@
 # Setup Documentation
 
+> **Note**: This is a V1. Feedback and contributions welcome.
+
 This directory contains detailed installation and configuration guides for all components of the **Lab4PurpleSec** environment.
+
+> **💡 Automation Available**: Most internal VMs can be deployed automatically using Vagrant and Ansible. See `../../automation/README.md` for automated deployment, or follow the manual guides below for complete control.
 
 ## Installation Guides
 
@@ -78,8 +82,20 @@ GOAD MINILAB Active Directory setup:
 
 For a complete lab setup, follow this sequence:
 
+### With Automation (Recommended)
+
 1. ✅ **Prerequisites** - Verify hardware/software requirements
-2. ✅ **VM Installation** - Install all virtual machines
+2. ✅ **Automated VMs** - Deploy internal VMs using `automation/Vagrantfile` (see `../../automation/README.md`)
+3. ✅ **pfSense Setup** - Configure firewall and network segmentation (manual)
+4. ✅ **External VMs** - Deploy GOAD and Metasploitable (see `../../automation/ORCHESTRATION.md`)
+5. ✅ **Web Server Setup** - Deploy vulnerable web applications (manual Docker Compose)
+6. ✅ **Wazuh Setup** - Deploy SIEM (automated) and agents (manual)
+7. ✅ **GOAD Setup** - Deploy Active Directory environment (external repository)
+
+### Manual Installation
+
+1. ✅ **Prerequisites** - Verify hardware/software requirements
+2. ✅ **VM Installation** - Install all virtual machines manually
 3. ✅ **pfSense Setup** - Configure firewall and network segmentation
 4. ✅ **Web Server Setup** - Deploy vulnerable web applications
 5. ✅ **Wazuh Setup** - Deploy SIEM and agents

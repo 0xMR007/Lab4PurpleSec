@@ -1,0 +1,103 @@
+# ============================================================================
+# Lab4PurpleSec - Ansible Inventory
+# ============================================================================
+# This inventory lists ONLY the internal VMs that are provisioned by
+# this automation (not managed by external repositories).
+#
+# External VMs (GOAD, Metasploitable3) are NOT listed here as they
+# are managed by their own automation.
+#
+# NOTE: pfSense is NOT listed here (manual installation).
+#
+# IMPORTANT: This inventory uses Vagrant's SSH port forwarding (127.0.0.1:port)
+# instead of static IPs, because VMs are on internal networks that are not
+# accessible from the Windows host. Ports are automatically assigned by Vagrant.
+#
+# To get actual ports and keys, run: vagrant ssh-config
+# Or use the dynamic inventory: ansible-playbook -i ansible/inventory-vagrant.py
+# ============================================================================
+
+all:
+  children:
+    # DMZ Segment - Internal VMs only
+    dmz:
+      hosts:
+        dmz-web01-lin:
+          # Use Vagrant SSH port forwarding (check actual port with: vagrant ssh-config)
+          ansible_host: 127.0.0.1
+          ansible_port: 2200  # May vary - check with: vagrant ssh-config dmz-web01-lin | grep Port
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ../.vagrant/machines/dmz-web01-lin/virtualbox/private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          # Note: DMZ-MS2-LIN, DMZ-MS3-LIN, DMZ-MS3-WIN are external (not listed)
+
+    # LAN Segment - Internal VMs only
+    lan:
+      hosts:
+        lan-siem-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2201  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ../.vagrant/machines/lan-siem-lin/virtualbox/private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        lan-test-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2202  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ../.vagrant/machines/lan-test-lin/virtualbox/private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        lan-attack-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2203  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ../.vagrant/machines/lan-attack-lin/virtualbox/private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          # Note: LAN-DC01-WIN, LAN-WS01-WIN are external (GOAD, not listed)
+
+    # WAN Segment - Internal VMs only
+    wan:
+      hosts:
+        wan-attack-lin:
+          ansible_host: 127.0.0.1
+          ansible_port: 2204  # May vary
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: ../.vagrant/machines/wan-attack-lin/virtualbox/private_key
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          # Note: WAN uses bridged network (DHCP), but SSH access is via port forwarding
+
+    # Grouping by OS type
+    linux:
+      children:
+        dmz:
+        lan:
+        wan:
+
+    # Grouping by function
+    web_servers:
+      hosts:
+        dmz-web01-lin:
+
+    siem:
+      hosts:
+        lan-siem-lin:
+
+    attack_machines:
+      hosts:
+        lan-attack-lin:
+        wan-attack-lin:
+
+# ============================================================================
+# External VMs (NOT managed by this inventory)
+# ============================================================================
+# The following VMs exist in the lab but are managed externally:
+#
+# - FW-PFSENSE (pfSense firewall) - Manual installation
+# - LAN-DC01-WIN (GOAD DC) - Managed by GOAD repository
+# - LAN-WS01-WIN (GOAD WS) - Managed by GOAD repository
+# - DMZ-MS2-LIN (Metasploitable2) - Manual VMX import
+# - DMZ-MS3-LIN (Metasploitable3 Linux) - Managed by Metasploitable3 repository
+# - DMZ-MS3-WIN (Metasploitable3 Windows) - Managed by Metasploitable3 repository
+#
+# See automation/ORCHESTRATION.md for integration details.
+# ============================================================================
+

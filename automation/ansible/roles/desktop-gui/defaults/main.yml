@@ -1,0 +1,42 @@
+# ============================================================================
+# Desktop GUI Role - Default Variables
+# ============================================================================
+# Default variables for the desktop-gui role
+# ============================================================================
+
+---
+# Enable/disable desktop GUI installation
+desktop_gui_enabled: false
+
+# Desktop environment to install
+# Options: gnome, gnome-minimal, kde, xfce, mate
+desktop_gui_environment: "gnome-minimal"
+
+# Display manager
+# Options: gdm3, lightdm, sddm
+desktop_gui_display_manager: "gdm3"
+
+# Enable auto-login for a user
+desktop_gui_autologin_enabled: true
+desktop_gui_autologin_user: "vagrant"
+
+# Install additional GUI applications
+desktop_gui_install_firefox: true
+desktop_gui_install_apps: true
+
+# Additional packages to install
+desktop_gui_extra_packages:
+  - firefox
+  - gedit
+  - gnome-terminal
+  - gnome-system-monitor
+  - dconf-editor
+  - vim-gtk3
+
+# Performance optimizations for VMs
+desktop_gui_disable_animations: true
+desktop_gui_disable_tracker: true  # Disable file indexing
+
+# Resolution (for VirtualBox)
+desktop_gui_resolution: "1920x1080"
+

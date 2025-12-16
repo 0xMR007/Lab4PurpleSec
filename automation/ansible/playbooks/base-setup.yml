@@ -1,0 +1,17 @@
+# ============================================================================
+# Lab4PurpleSec - Base Setup Playbook
+# ============================================================================
+# Base configuration playbook for all internal VMs.
+# This playbook applies common settings and prepares the system.
+#
+# Usage:
+#   ansible-playbook -i ../inventory.yml playbooks/base-setup.yml
+# ============================================================================
+
+---
+- name: Base system setup
+  hosts: all
+  become: yes
+  roles:
+    - common
+    - linux-base

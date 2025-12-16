@@ -1,0 +1,50 @@
+# ============================================================================
+# Lab4PurpleSec - Local Inventory for ansible_local
+# ============================================================================
+# This inventory is used by ansible_local provisioner in Vagrant.
+# Each VM uses this inventory to configure itself locally.
+# The limit parameter in Vagrantfile ensures only the current VM is targeted.
+# ============================================================================
+
+all:
+  children:
+    dmz:
+      hosts:
+        dmz-web01-lin:
+          ansible_connection: local
+          ansible_user: vagrant
+
+    lan:
+      hosts:
+        lan-siem-lin:
+          ansible_connection: local
+          ansible_user: vagrant
+        lan-test-lin:
+          ansible_connection: local
+          ansible_user: vagrant
+        lan-attack-lin:
+          ansible_connection: local
+          ansible_user: vagrant
+
+    wan:
+      hosts:
+        wan-attack-lin:
+          ansible_connection: local
+          ansible_user: vagrant
+
+    web_servers:
+      hosts:
+        dmz-web01-lin:
+
+    siem:
+      hosts:
+        lan-siem-lin:
+
+    attack_machines:
+      hosts:
+        lan-attack-lin:
+        wan-attack-lin:
+
+    test_machines:
+      hosts:
+        lan-test-lin:

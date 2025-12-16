@@ -1,0 +1,42 @@
+# ============================================================================
+# Hosts File Role - Main Tasks
+# ============================================================================
+# This role configures /etc/hosts file on Linux machines
+# ============================================================================
+
+---
+- name: Backup existing /etc/hosts
+  copy:
+    src: /etc/hosts
+    dest: /etc/hosts.backup
+    remote_src: yes
+  become: yes
+  when: hosts_file_backup | default(true) | bool
+  failed_when: false
+  changed_when: false
+
+- name: Merge common and host-specific hosts entries
+  set_fact:
+    all_hosts_entries: "{{ (common_hosts_entries | default([]) + hosts_file_entries | default([])) | unique }}"
+
+- name: Add hosts entries (common + host-specific)
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ip }} {{ item.hostnames | join(' ') }}"
+    regexp: "^{{ item.ip }}\\s+"
+    state: present
+  become: yes
+  loop: "{{ all_hosts_entries }}"
+  when: hosts_file_enabled | default(true) | bool
+
+- name: Remove old entries (if cleanup is enabled)
+  lineinfile:
+    path: /etc/hosts
+    regexp: "^{{ item }}$"
+    state: absent
+  become: yes
+  loop: "{{ hosts_file_remove | default([]) }}"
+  when:
+    - hosts_file_enabled | default(true) | bool
+    - hosts_file_cleanup | default(false) | bool
+

@@ -1,0 +1,31 @@
+# ============================================================================
+# Docker Role - Handlers
+# ============================================================================
+# Handlers for the docker role
+# Using docker compose (plugin) instead of docker-compose (standalone)
+# ============================================================================
+
+---
+- name: restart docker compose
+  command: docker compose restart
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  ignore_errors: yes
+
+- name: stop docker compose
+  command: docker compose down
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  ignore_errors: yes
+
+- name: start docker compose
+  command: docker compose up -d
+  args:
+    chdir: "{{ docker_compose_dir | default('/opt/webapps') }}"
+  become: yes
+  become_user: "{{ docker_compose_user | default('webadmin') }}"
+  ignore_errors: yes

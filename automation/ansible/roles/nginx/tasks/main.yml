@@ -1,0 +1,114 @@
+# ============================================================================
+# Nginx Role - Main Tasks
+# ============================================================================
+# This role installs and configures Nginx reverse proxy.
+# Used on DMZ-WEB01-LIN for routing to Docker containers.
+# ============================================================================
+
+---
+- name: Install Nginx
+  package:
+    name: nginx
+    state: present
+  become: yes
+  when: nginx_enabled | default(true) | bool
+
+- name: Ensure Nginx directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ nginx_config_path | dirname }}"
+    - "{{ nginx_sites_available }}"
+    - "{{ nginx_sites_enabled }}"
+    - "/var/log/nginx"
+  become: yes
+  when: nginx_enabled | default(true) | bool
+
+- name: Backup existing Nginx configuration
+  copy:
+    src: "{{ nginx_config_path }}"
+    dest: "{{ nginx_config_path }}.backup"
+    remote_src: yes
+  become: yes
+  when:
+    - nginx_enabled | default(true) | bool
+    - nginx_backup_config | default(true) | bool
+  failed_when: false
+  changed_when: false
+
+- name: Deploy Nginx main configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_config_path }}"
+    backup: yes
+    mode: '0644'
+  become: yes
+  when:
+    - nginx_enabled | default(true) | bool
+    - nginx_config_template is defined
+  notify: reload nginx
+
+- name: Deploy Nginx configuration from file
+  copy:
+    src: "{{ nginx_config_file }}"
+    dest: "{{ nginx_config_path }}"
+    backup: yes
+    mode: '0644'
+  become: yes
+  when:
+    - nginx_enabled | default(true) | bool
+    - nginx_config_file is defined
+    - nginx_config_template is not defined
+  notify: reload nginx
+
+- name: Create virtual host configurations
+  template:
+    src: virtual-host.conf.j2
+    dest: "{{ nginx_sites_available }}/{{ item.name }}.conf"
+    mode: '0644'
+  loop: "{{ nginx_virtual_hosts }}"
+  become: yes
+  when:
+    - nginx_enabled | default(true) | bool
+    - nginx_virtual_hosts is defined
+    - nginx_virtual_hosts | length > 0
+  notify: reload nginx
+
+- name: Enable virtual host sites
+  file:
+    src: "{{ nginx_sites_available }}/{{ item.name }}.conf"
+    dest: "{{ nginx_sites_enabled }}/{{ item.name }}.conf"
+    state: link
+  loop: "{{ nginx_virtual_hosts }}"
+  become: yes
+  when:
+    - nginx_enabled | default(true) | bool
+    - nginx_virtual_hosts is defined
+    - nginx_virtual_hosts | length > 0
+
+- name: Remove default Nginx site (if exists)
+  file:
+    path: "{{ nginx_sites_enabled }}/default"
+    state: absent
+  become: yes
+  when: nginx_enabled | default(true) | bool
+  notify: reload nginx
+
+- name: Test Nginx configuration
+  command: nginx -t
+  register: nginx_test
+  changed_when: false
+  become: yes
+  when: nginx_enabled | default(true) | bool
+
+- name: Ensure Nginx service is running
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+  become: yes
+  when: nginx_enabled | default(true) | bool

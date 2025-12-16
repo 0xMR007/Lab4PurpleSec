@@ -1,0 +1,183 @@
+user  nginx;
+worker_processes  auto;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    # Logs (optional)
+    access_log  /var/log/nginx/access.log;
+    error_log   /var/log/nginx/error.log;
+
+    # ------------------------------
+    # 1. Juice Shop (default port)
+    # ------------------------------
+    server {
+        listen 80;
+        server_name juice.lab;
+        location / {
+            proxy_pass http://juice-shop:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+
+    # ------------------------------
+    # 2. WebGoat (default port)
+    # ------------------------------
+    server {
+        listen 80;
+        server_name webgoat.lab;
+
+        location / {
+            proxy_pass http://webgoat:8080/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cookie_path /WebGoat /;
+            proxy_redirect off;
+        }
+    }
+
+    # ------------------------------
+    # 3. WebWolf (default port)
+    # ------------------------------
+    server {
+        listen 80;
+        server_name webwolf.lab;
+
+        location / {
+            proxy_pass http://webgoat:9090/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cookie_path /WebWolf /;
+            proxy_redirect off;
+        }
+    }
+
+    # ------------------------------
+    # 4. bWAPP
+    # ------------------------------
+    server {
+        listen 80;
+        server_name bwapp.lab;
+        location / {
+            proxy_pass http://bwapp;
+        }
+    }
+
+    # ------------------------------
+    # 5. NodeGoat
+    # ------------------------------
+{% if docker_nodegoat_enabled | default(true) %}
+    server {
+        listen 80;
+        server_name nodegoat.lab;
+        location / {
+            proxy_pass http://nodegoat:4000;
+        }
+    }
+{% endif %}
+
+    # ------------------------------
+    # 6. VAmPI
+    # ------------------------------
+    server {
+        listen 80;
+        server_name vampi.lab;
+        location / {
+            proxy_pass http://vampi:5000;
+        }
+    }
+
+    # ------------------------------
+    # 7. Metasploitable2
+    # ------------------------------
+{% if metasploitable2_ip is defined %}
+    server {
+        listen 80;
+        server_name ms2.lab;
+        location / {
+            proxy_pass http://{{ metasploitable2_ip }}:80;
+            proxy_set_header Host $host;
+        }
+    }
+
+    server {
+        listen 80;
+        server_name ms2-8180.lab;
+        location / {
+            proxy_pass http://{{ metasploitable2_ip }}:8180;
+            proxy_set_header Host $host;
+        }
+    }
+{% endif %}
+
+    # ------------------------------
+    # 8. Metasploitable3 Linux
+    # ------------------------------
+{% if metasploitable3_linux_ip is defined %}
+    server {
+        listen 80;
+        server_name ms3linux.lab;
+        location / {
+            proxy_pass http://{{ metasploitable3_linux_ip }}:80;
+            proxy_set_header Host $host;
+        }
+    }
+
+    server {
+        listen 80;
+        server_name ms3linux-8080.lab;
+        location / {
+            proxy_pass http://{{ metasploitable3_linux_ip }}:8080;
+            proxy_set_header Host $host;
+        }
+    }
+{% endif %}
+
+    # ------------------------------
+    # 9. Metasploitable3 Windows
+    # ------------------------------
+{% if metasploitable3_win_ip is defined %}
+    server {
+        listen 80;
+        server_name ms3win.lab;
+        location / { proxy_pass http://{{ metasploitable3_win_ip }}:80; proxy_set_header Host $host; }
+    }
+
+    server {
+        listen 80;
+        server_name ms3win-8282.lab;
+        location / { proxy_pass http://{{ metasploitable3_win_ip }}:8282; proxy_set_header Host $host; }
+    }
+
+    server {
+        listen 80;
+        server_name ms3win-8484.lab;
+        location / { proxy_pass http://{{ metasploitable3_win_ip }}:8484; proxy_set_header Host $host; }
+    }
+
+    server {
+        listen 80;
+        server_name ms3win-4848.lab;
+        location / { proxy_pass https://{{ metasploitable3_win_ip }}:4848; proxy_set_header Host $host; }
+    }
+
+    server {
+        listen 80;
+        server_name ms3win-8585.lab;
+        location / { proxy_pass http://{{ metasploitable3_win_ip }}:8585; proxy_set_header Host $host; }
+    }
+{% endif %}
+}
+

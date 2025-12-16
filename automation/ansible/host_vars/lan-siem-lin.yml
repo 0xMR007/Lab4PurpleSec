@@ -1,0 +1,56 @@
+# ============================================================================
+# Host Variables - LAN-SIEM-LIN
+# ============================================================================
+# Variables specific to the SIEM server
+# ============================================================================
+
+---
+hostname: "LAN-SIEM-LIN"
+ip_address: "192.168.10.104"
+network_interface: "eth1"
+
+# Wazuh configuration
+wazuh_manager_enabled: true
+wazuh_manager_ip: "192.168.10.104"
+wazuh_version: "4.14"  # Wazuh version for installation script
+wazuh_dashboard_enabled: true
+wazuh_dashboard_port: 443
+wazuh_dashboard_host: "0.0.0.0"
+
+# Wazuh agent (optional, for self-monitoring)
+wazuh_agent_enabled: false
+
+# SIEM resources
+siem_memory: 4096
+siem_storage: 64
+
+# Docker (not needed for Wazuh, but can be enabled)
+linux_base_install_docker: false
+
+# Firewall (disabled by default, can be enabled if needed)
+linux_base_configure_firewall: false
+
+# Integration with Suricata (if Suricata logs are forwarded)
+wazuh_integrate_suricata: false
+wazuh_suricata_log_path: "/var/log/suricata/eve.json"
+
+# Hosts file configuration (minimal for realism)
+hosts_file_enabled: true
+hosts_file_entries:
+  # LAN hosts
+  - ip: "192.168.10.100"
+    hostnames:
+      - "test"
+  - ip: "192.168.10.109"
+    hostnames:
+      - "attack"
+  - ip: "192.168.10.30"
+    hostnames:
+      - "dc01"
+  - ip: "192.168.10.31"
+    hostnames:
+      - "ws01"
+  # DMZ hosts (for monitoring)
+  - ip: "192.168.20.105"
+    hostnames:
+      - "web01"

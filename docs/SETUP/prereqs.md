@@ -19,6 +19,7 @@ You will find all useful information to prepare your environment.
   - [Hardware](#hardware)
   - [Software](#software)
     - [Installation Note](#installation-note)
+  - [Resource requirements](#resource-requirements)
 - [Reference Configuration](#reference-configuration)
   - [Hardware](#hardware-1)
   - [Software](#software-1)
@@ -41,6 +42,7 @@ This section describes the minimum hardware and software requirements necessary 
   - VirtualBox: [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)
 
 > **Note**: This lab can be deployed using VirtualBox if needed, but VMware Workstation Pro was personally used for this documentation.
+
 - Required ISO images:
   - **pfSense (2.7.2)**: [https://atxfiles.netgate.com/mirror/downloads/](https://atxfiles.netgate.com/mirror/downloads/) — ISO image for firewall installation
   - **Kali Linux**: [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images) — ISO image for attack machines
@@ -52,7 +54,24 @@ This section describes the minimum hardware and software requirements necessary 
 
 ### Installation Note
 
-> **Manual installation required**: All virtual machines must be installed manually from ISO images or via Vagrant for projects that support it (Metasploitable3, GOAD). Consult `Docs/SETUP/VMs_installation.md` for detailed installation guides for each machine.
+> **Automation Available**: Most internal VMs (LAN-SIEM-LIN, LAN-TEST-LIN, LAN-ATTACK-LIN, WAN-ATTACK-LIN, DMZ-WEB01-LIN) can be deployed automatically using Vagrant and Ansible. See `../../automation/README.md` for automated deployment.
+
+> **Manual installation**: Some components require manual installation from ISO images or via external repositories (pfSense, GOAD, Metasploitable2/3). Consult `docs/SETUP/VMs_installation.md` for detailed manual installation guides for each machine.
+
+> **Note**: Because the main focus of this project is to provide a learning experience, manual configuration is still required (pfSense, Suricata, GOAD, network configurations, Wazuh Manager, Wazuh Agents, etc.). Consult `docs/SETUP/` for detailed manual installation guides. Contributions are welcome to automate more components or for making adapted profiles (mini version, balanced version, etc.).
+
+## Resource requirements
+
+Lab4PurpleSec is a realistic Purple Team lab.
+Depending on the scenario, not all virtual machines need to run simultaneously.
+
+For optimal usage:
+
+- Minimum: 16 GB RAM (limited scenarios)
+- Recommended: 32 GB RAM
+- Optimal: 64 GB RAM (yes this is a huge environment)
+
+Scenarios are designed to be executed step-by-step, not all at once.
 
 # Reference Configuration
 

@@ -1,0 +1,27 @@
+# ============================================================================
+# Lab4PurpleSec - Applications Playbook
+# ============================================================================
+# Application-specific configuration playbook.
+# This playbook deploys and configures applications on specific hosts.
+#
+# Usage:
+#   ansible-playbook -i ../inventory.yml playbooks/applications.yml
+# ============================================================================
+
+---
+- name: Deploy web applications
+  hosts: web_servers
+  become: yes
+  roles:
+    - docker
+    - nginx
+
+- name: Deploy SIEM
+  hosts: siem
+  become: yes
+  roles:
+    - wazuh
+
+# ============================================================================
+# Note: Suricata is typically deployed on pfSense, not on VMs
+# ============================================================================

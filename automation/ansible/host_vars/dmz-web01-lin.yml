@@ -1,0 +1,51 @@
+# ============================================================================
+# Host Variables - DMZ-WEB01-LIN
+# ============================================================================
+# Variables specific to the DMZ web server
+# ============================================================================
+
+---
+hostname: "DMZ-WEB01-LIN"
+ip_address: "192.168.20.105"
+network_interface: "eth1"
+
+# Docker configuration
+docker_enabled: true
+linux_base_install_docker: true
+linux_base_docker_users:
+  - webadmin
+
+# Docker Compose deployment
+docker_compose_dir: "/opt/webapps"
+docker_deploy_compose: true  # Deploy docker-compose.yml from CONFIGS/
+docker_deploy_nginx: true  # Deploy nginx.conf from CONFIGS/
+docker_pull_images: true  # Pull images after deployment
+docker_nodegoat_enabled: true
+
+# Metasploitable IPs (for Nginx reverse proxy)
+metasploitable2_ip: "192.168.20.104"
+metasploitable3_linux_ip: "192.168.20.106"
+metasploitable3_win_ip: "192.168.20.107"
+
+# Hosts file configuration (minimal for realism)
+hosts_file_enabled: true
+hosts_file_entries:
+  # DMZ hosts (same segment)
+  - ip: "192.168.20.104"
+    hostnames:
+      - "ms2"
+  - ip: "192.168.20.106"
+    hostnames:
+      - "ms3-lin"
+  - ip: "192.168.20.107"
+    hostnames:
+      - "ms3-win"
+
+# Wazuh agent configuration (optional)
+wazuh_agent_enabled: true
+wazuh_manager_ip: "192.168.10.104"
+wazuh_agent_name: "DMZ-WEB01-LIN"
+wazuh_docker_monitoring: true # Monitor Docker container logs
+
+# Firewall (disabled by default, can be enabled if needed)
+linux_base_configure_firewall: false

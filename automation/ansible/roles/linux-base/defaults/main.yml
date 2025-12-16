@@ -1,0 +1,58 @@
+# ============================================================================
+# Linux Base Role - Default Variables
+# ============================================================================
+# Default variables for the linux-base role
+# ============================================================================
+
+---
+# Network tools
+linux_base_network_tools:
+  - net-tools
+  - iputils-ping
+  - dnsutils
+  - tcpdump
+  - netcat-openbsd
+
+# Docker configuration
+linux_base_install_docker: true
+linux_base_docker_version: "latest"
+linux_base_install_docker_compose: true
+linux_base_docker_compose_version: "v2.24.0"
+linux_base_docker_compose_standalone: false  # Use plugin by default
+
+# Docker users (users to add to docker group)
+linux_base_docker_users: []
+
+# Docker daemon configuration
+# Example:
+# linux_base_docker_daemon_config:
+#   log-driver: "json-file"
+#   log-opts:
+#     max-size: "10m"
+#     max-file: "3"
+linux_base_docker_daemon_config: {}
+
+# Firewall configuration
+linux_base_configure_firewall: false  # Set to true if using ufw/firewalld
+
+# Firewall rules
+# For UFW (Debian/Ubuntu):
+#   - rule: allow
+#     port: "22"
+#     proto: tcp
+#   - rule: allow
+#     port: "80"
+#     proto: tcp
+# For firewalld (RedHat/CentOS):
+#   - rule: allow
+#     port: "22"
+#     proto: tcp
+linux_base_firewall_rules: []
+
+# System utilities
+linux_base_system_utils:
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - lsb-release
+  - software-properties-common

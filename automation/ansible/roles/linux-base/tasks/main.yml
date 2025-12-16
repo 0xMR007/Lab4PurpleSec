@@ -1,0 +1,195 @@
+# ============================================================================
+# Linux Base Role - Main Tasks
+# ============================================================================
+# This role applies Linux-specific base configuration:
+# - Network tools
+# - Docker installation
+# - Firewall helpers
+# - System utilities
+# ============================================================================
+
+---
+- name: Install system utilities
+  package:
+    name: "{{ linux_base_system_utils }}"
+    state: present
+  become: yes
+  when: linux_base_system_utils | length > 0
+
+- name: Install network tools
+  package:
+    name: "{{ linux_base_network_tools }}"
+    state: present
+  become: yes
+  when: linux_base_network_tools | length > 0
+
+- name: Check if Docker is installed
+  command: which docker
+  register: docker_installed
+  changed_when: false
+  failed_when: false
+
+- name: Ensure /etc/apt/keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when:
+    - linux_base_install_docker | bool
+    - ansible_pkg_mgr == "apt"
+    - docker_installed.rc != 0
+  become: yes
+
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    dest: /tmp/docker.gpg
+    mode: '0644'
+  when:
+    - linux_base_install_docker | bool
+    - ansible_pkg_mgr == "apt"
+    - docker_installed.rc != 0
+  become: yes
+
+- name: Install Docker GPG key
+  ansible.builtin.shell: gpg --dearmor < /tmp/docker.gpg > /etc/apt/keyrings/docker.gpg
+  args:
+    creates: /etc/apt/keyrings/docker.gpg
+  when:
+    - linux_base_install_docker | bool
+    - ansible_pkg_mgr == "apt"
+    - docker_installed.rc != 0
+  become: yes
+
+- name: Clean up temporary GPG file
+  file:
+    path: /tmp/docker.gpg
+    state: absent
+  when:
+    - linux_base_install_docker | bool
+    - ansible_pkg_mgr == "apt"
+  become: yes
+
+- name: Add Docker repository (Debian/Ubuntu)
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    state: present
+    update_cache: yes
+  when:
+    - linux_base_install_docker | bool
+    - ansible_pkg_mgr == "apt"
+    - docker_installed.rc != 0
+  become: yes
+
+- name: Install Docker
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+  when:
+    - linux_base_install_docker | bool
+    - docker_installed.rc != 0
+  become: yes
+  notify: restart docker
+
+- name: Ensure Docker service is running
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+  when: linux_base_install_docker | bool
+  become: yes
+
+- name: Add users to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  loop: "{{ linux_base_docker_users | default([]) }}"
+  when:
+    - linux_base_install_docker | bool
+    - linux_base_docker_users is defined
+    - linux_base_docker_users | length > 0
+  become: yes
+
+- name: Install docker-compose standalone (if not using plugin)
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ linux_base_docker_compose_version }}/docker-compose-linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+  when:
+    - linux_base_install_docker_compose | bool
+    - linux_base_docker_compose_standalone | default(false) | bool
+  become: yes
+
+- name: Configure Docker daemon (if needed)
+  copy:
+    content: "{{ linux_base_docker_daemon_config | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+  when:
+    - linux_base_install_docker | bool
+    - linux_base_docker_daemon_config is defined
+    - linux_base_docker_daemon_config | length > 0
+  become: yes
+  notify: restart docker
+
+- name: Install UFW (if firewall configuration is enabled)
+  package:
+    name: ufw
+    state: present
+  when:
+    - linux_base_configure_firewall | bool
+    - ansible_pkg_mgr == "apt"
+  become: yes
+
+- name: Configure UFW default policies
+  ufw:
+    state: enabled
+    policy: "{{ item.policy }}"
+    direction: "{{ item.direction }}"
+  loop:
+    - { policy: "deny", direction: "incoming" }
+    - { policy: "allow", direction: "outgoing" }
+  when:
+    - linux_base_configure_firewall | bool
+    - ansible_pkg_mgr == "apt"
+  become: yes
+
+- name: Configure UFW rules
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port | default(omit) }}"
+    proto: "{{ item.proto | default('tcp') }}"
+    to_ip: "{{ item.to_ip | default(omit) }}"
+    to_port: "{{ item.to_port | default(omit) }}"
+    state: enabled
+  loop: "{{ linux_base_firewall_rules }}"
+  when:
+    - linux_base_configure_firewall | bool
+    - linux_base_firewall_rules is defined
+    - linux_base_firewall_rules | length > 0
+    - ansible_pkg_mgr == "apt"
+  become: yes
+
+- name: Install firewalld (if firewall configuration is enabled)
+  package:
+    name: firewalld
+    state: present
+  when:
+    - linux_base_configure_firewall | bool
+    - ansible_pkg_mgr == "yum"
+  become: yes
+
+- name: Ensure firewalld is running
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+  when:
+    - linux_base_configure_firewall | bool
+    - ansible_pkg_mgr == "yum"
+  become: yes

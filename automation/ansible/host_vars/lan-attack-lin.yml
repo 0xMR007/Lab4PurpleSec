@@ -1,0 +1,32 @@
+# ============================================================================
+# Host Variables - LAN-ATTACK-LIN
+# ============================================================================
+# Variables specific to the LAN attack machine (Kali Linux)
+# ============================================================================
+
+---
+hostname: "LAN-ATTACK-LIN"
+ip_address: "192.168.10.109"
+network_interface: "eth1"
+
+# Docker (optional, can be enabled for testing)
+linux_base_install_docker: false
+
+# Firewall (disabled by default for attack machine)
+linux_base_configure_firewall: false
+
+# Hosts file configuration (minimal for realism)
+hosts_file_enabled: true
+hosts_file_entries:
+  # AD domain hosts (targets)
+  - ip: "192.168.10.30"
+    hostnames:
+      - "dc01"
+  - ip: "192.168.10.31"
+    hostnames:
+      - "ws01"
+  # DMZ targets
+  - ip: "192.168.20.105"
+    hostnames:
+      - "web01"
+
