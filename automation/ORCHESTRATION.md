@@ -74,7 +74,7 @@ VBoxManage list runningvms
 
 Before starting the deployment, ensure:
 
-- [ ] VirtualBox (or VMware) is installed and services are running
+- [ ] VirtualBox is installed and services are running
 - [ ] VirtualBox GUI has been launched at least once
 - [ ] Sufficient disk space available (check default VM directory)
 - [ ] RAM and CPU resources meet your chosen configuration
@@ -332,16 +332,15 @@ After deploying all VMs, verify:
 ### External VMs Not on Correct Network
 
 1. **Power off VM**
-2. **Edit VM settings** in VirtualBox/VMware
+2. **Edit VM settings** in VirtualBox
 3. **Change network adapter** to correct internal network (`lab-lan` or `lab-dmz`)
 4. **Start VM** and verify IP configuration
 
 ### Network Adapter Not Found
 
-1. **Verify internal networks exist** in VirtualBox/VMware
+1. **Verify internal networks exist** in VirtualBox
 2. **Create networks manually** if needed:
    - VirtualBox: `File > Host Network Manager > Create`
-   - VMware: `Edit > Virtual Network Editor`
 
 ---
 

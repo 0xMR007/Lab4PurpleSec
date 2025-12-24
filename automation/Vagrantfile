@@ -165,12 +165,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Don't show GUI by default (can be enabled per VM if needed)
   end
 
-  # VMware provider (if plugin installed)
-  config.vm.provider "vmware_desktop" do |vmware|
-    vmware.gui = false
-    vmware.vmx["displayName"] = nil  # Will be set per VM
-  end
-
   # ========================================================================
   # Internal VMs Configuration
   # ========================================================================
@@ -222,14 +216,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         
         # Fix for WSL/Windows: Disable UART to avoid /dev/null issues
         vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
-      end
-
-      # VMware provider configuration (if plugin installed)
-      vm.vm.provider "vmware_desktop" do |vmware|
-        vmware.vmx["displayName"] = settings[:hostname]
-        vmware.vmx["memsize"] = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_MEMORY"] || settings[:memory]).to_i
-        vmware.vmx["numvcpus"] = (ENV["VAGRANT_#{vm_name.upcase.gsub('-', '_')}_CPUS"] || settings[:cpus]).to_i
-        vmware.vmx["gui"] = "FALSE"
       end
 
       # ====================================================================

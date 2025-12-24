@@ -79,7 +79,7 @@ These VMs are managed by external repositories and must be deployed separately:
 
 - **Metasploitable2** (DMZ-MS2-LIN)
   - Download: https://www.rapid7.com/products/metasploit/metasploitable/
-  - Manual: Open VMX file in VirtualBox/VMware
+  - Manual: Open VMX file in VirtualBox
   - Network: Configure to use 'lab-dmz' internal network
 
 **See:** `../docs/SETUP/GOAD_setup.md`
@@ -88,8 +88,8 @@ These VMs are managed by external repositories and must be deployed separately:
 
 Before using the automation scripts, ensure you have:
 
-1. **VirtualBox** or **VMware Workstation/Player** installed
-2. **Vagrant** installed (version 2.2+)
+1. **VirtualBox** installed
+2. **Vagrant** installed (version 2.2+) 
    - Download: https://www.vagrantup.com/downloads
 3. **Ansible** installed (optional, for manual playbook execution)
    - On Linux/macOS: `sudo apt install ansible` or `brew install ansible`
@@ -219,9 +219,8 @@ These networks are automatically created by Vagrant. Ensure pfSense is configure
 # Check Vagrant status
 vagrant status
 
-# Check VirtualBox/VMware logs
+# Check VirtualBox logs
 # VirtualBox: Check VM logs in VirtualBox GUI
-# VMware: Check logs in VMware Workstation
 
 # Destroy and recreate
 vagrant destroy

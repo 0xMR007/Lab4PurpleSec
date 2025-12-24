@@ -10,7 +10,7 @@ Installs a desktop environment (Gnome, XFCE, etc.) optimized for virtual machine
 
 - Ubuntu 20.04 or later
 - At least 4 GB RAM (6 GB recommended for Gnome)
-- VirtualBox or VMware (for GUI display)
+- VirtualBox (for GUI display)
 
 ## Role Variables
 
