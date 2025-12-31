@@ -1,9 +1,9 @@
-# Forcer LF pour les scripts
+# Force LF for scripts
 *.py text eol=lf
 *.sh text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.cfg text eol=lf
 
-# Fichiers Windows
+# Windows files
 *.ps1 text eol=crlf

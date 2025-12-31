@@ -2,7 +2,7 @@
 
 > **⚠️ Security Warning**: This lab contains intentionally vulnerable services. **Never** connect these machines to a production network. Always change default passwords after installation. This environment is designed for isolated, educational use only.
 
-> **Note**: This is a V1. Feedback and contributions welcome.
+> **Note**: This is a V1. Feedback and contributions are welcome.
 
 This directory contains Vagrant and Ansible automation scripts for semi-automated deployment of the **Lab4PurpleSec** environment.
 

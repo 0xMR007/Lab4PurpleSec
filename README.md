@@ -10,7 +10,7 @@
 
 > **Note**: This project was previously named "Lab4OffSec" and has been renamed to "Lab4PurpleSec" to better reflect its Purple Team focus.
 
-> **Note**: This is a V1. Feedback and contributions welcome.
+> **Note**: This is a V1. Feedback and contributions are welcome.
 
 > **📜 License Notice**: The use of this project (including for CTFs, commercial projects, training, or any other purpose) is subject to the terms and conditions of the MIT License. See `LICENSE` for full details. By using this project, you agree to comply with the license terms, including maintaining copyright notices and license information.
 

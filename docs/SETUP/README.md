@@ -1,6 +1,6 @@
 # Setup Documentation
 
-> **Note**: This is a V1. Feedback and contributions welcome.
+> **Note**: This is a V1. Feedback and contributions are welcome.
 
 This directory contains detailed installation and configuration guides for all components of the **Lab4PurpleSec** environment.
 

@@ -4,7 +4,7 @@
 
 > **📜 License Notice**: The use of this project (including for CTFs, commercial projects, training, or any other purpose) is subject to the terms and conditions of the MIT License. See `LICENSE` for full details. For more information, see the [License section](../README.md#license) in the main README.
 
-> **Note**: This is a V1. Feedback and contributions welcome.
+> **Note**: This is a V1. Feedback and contributions are welcome.
 
 ## Overview
 
