@@ -52,8 +52,6 @@ The following table provides an overview of the documented cybersecurity scenari
 
 > See also [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) for the lab topology and the scenario index.
 
-![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
-
 ## TL;DR
 
 **Lab4PurpleSec** includes the following features:
@@ -128,7 +126,9 @@ For detailed hardware and software requirements, see `docs/SETUP/prereqs.md`.
 
 ### Lab4PurpleSec
 
-Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB). The overall topology is shown in the diagram at the top of this document.
+Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB). The overall topology is shown in the following diagram.
+
+![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
 
 ### GOAD-MINILAB
 

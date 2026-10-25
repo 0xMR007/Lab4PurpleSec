@@ -52,8 +52,6 @@ Le tableau suivant présente un aperçu des scénarios de cybersécurité docume
 
 > Voir aussi [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) pour la topologie du lab et l'index des scénarios.
 
-![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
-
 ## TL;DR
 
 **Lab4PurpleSec** dispose des caractéristiques suivantes :
@@ -128,7 +126,9 @@ Pour les prérequis matériels et logiciels détaillés, voir `docs/SETUP/prereq
 
 ### Lab4PurpleSec
 
-Lab4PurpleSec est un environnement dédié à l'exploitation de vulnérabilités applicatives et systèmes, hébergeant des machines intentionnellement vulnérables (Metasploitable2/3), des applications web OWASP dans une zone DMZ isolée ainsi qu'un environnement Active Directory vulnérable (GOAD MINILAB). La topologie générale est présentée dans le diagramme en haut de ce document.
+Lab4PurpleSec est un environnement dédié à l'exploitation de vulnérabilités applicatives et systèmes, hébergeant des machines intentionnellement vulnérables (Metasploitable2/3), des applications web OWASP dans une zone DMZ isolée ainsi qu'un environnement Active Directory vulnérable (GOAD MINILAB). La topologie générale est présentée ci-dessous.
+
+![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
 
 ### GOAD-MINILAB
 
