@@ -273,7 +273,7 @@ Let's try to connect to the `mini.lab` domain on `LAN-WS01-WIN` with an authoriz
 
 ![LAN-WS01-WIN-alice-domain-susccess-auth.png](/assets/images/GOAD-MINILAB-tests/Auth/LAN-WS01-WIN-alice-domain-susccess-auth.png)
 
-> Note on credentials: the following tests will be performed with the `alice` account and its default GOAD password. Feel free to adapt your credentials if you modified them during GOAD installation (cf. `Docs/SETUP/GOAD_setup.md`).
+> Note on credentials: the following tests will be performed with the `alice` account and its default GOAD password. Feel free to adapt your credentials if you modified them during GOAD installation (cf. `docs/SETUP/GOAD_setup.md`).
 
 Connection verification:
 

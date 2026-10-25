@@ -34,7 +34,7 @@ This section details the IP topology, addressing plan, and filtering rules imple
 
 The lab is segmented into three distinct subnets to isolate network functions and limit attack propagation between zones.
 
-> Cf. `Docs/SETUP/prereqs.md`
+> Cf. `docs/SETUP/prereqs.md`
 
 | Subnet          | Function                            |
 | --------------- | ----------------------------------- |
@@ -69,7 +69,7 @@ The following table presents the static addressing plan for all virtual machines
 
 The pfSense firewall is the core of network segmentation, managing three distinct interfaces and applying strict filtering rules to control flows between WAN, LAN, and DMZ.
 
-> Cf. `Docs/SETUP/pfsense_setup.md`
+> Cf. `docs/SETUP/pfsense_setup.md`
 
 ### Interfaces
 
@@ -162,7 +162,7 @@ The table below references all intentionally vulnerable web applications accessi
 | DMZ-MS3-LIN   | ms3linux.lab      | 80   | Web (MS3 Linux) | Metasploitable3 (Linux) – Vulnerable web services (chat app, drupal, etc…) |
 | DMZ-MS3-LIN   | ms3linux-8080.lab | 8080 | Web (MS3 Linux) | Metasploitable3 (Linux) – Old Continuum web service                        |
 
-See `Docs/SETUP/Web_server_setup.md` for more details.
+See `docs/SETUP/Web_server_setup.md` for more details.
 
 ## Typical Flows
 

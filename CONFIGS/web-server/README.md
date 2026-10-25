@@ -78,8 +78,8 @@ sudo systemctl reload nginx
 
 For complete deployment instructions, see:
 
-- **Setup Guide**: `Docs/SETUP/Web_server_setup.md`
-- **Test Guide**: `Docs/TESTS/Web_server.md`
+- **Setup Guide**: `docs/SETUP/Web_server_setup.md`
+- **Test Guide**: `docs/TESTS/Web_server.md`
 
 ## Customization
 

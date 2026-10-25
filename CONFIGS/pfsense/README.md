@@ -77,7 +77,7 @@ This configuration includes:
 
 #### Manual Configuration Alternative
 
-If you prefer to configure pfSense manually, refer to `Docs/SETUP/pfsense_setup.md` for detailed step-by-step instructions.
+If you prefer to configure pfSense manually, refer to `docs/SETUP/pfsense_setup.md` for detailed step-by-step instructions.
 
 ### Customization
 
@@ -98,7 +98,7 @@ If the import fails or causes issues:
 3. **Check interface assignments** match your hardware
 4. **Verify network segments** are configured correctly in your hypervisor
 5. **Try importing section by section** (not recommended for beginners)
-6. **Follow the manual configuration guide** in `Docs/SETUP/pfsense_setup.md`
+6. **Follow the manual configuration guide** in `docs/SETUP/pfsense_setup.md`
 
 ### Post-Import Checklist
 
@@ -126,10 +126,10 @@ After successful import, verify:
 
 For detailed information about:
 
-- **Firewall rules**: See `ARCHITECTURE.md` and `Docs/SETUP/pfsense_setup.md`
-- **NAT configuration**: See `Docs/SETUP/pfsense_setup.md`
-- **Suricata setup**: See `Docs/SETUP/pfsense_setup.md`
-- **Testing**: See `Docs/TESTS/pfSense.md`
+- **Firewall rules**: See `ARCHITECTURE.md` and `docs/SETUP/pfsense_setup.md`
+- **NAT configuration**: See `docs/SETUP/pfsense_setup.md`
+- **Suricata setup**: See `docs/SETUP/pfsense_setup.md`
+- **Testing**: See `docs/TESTS/pfSense.md`
 
 ---
 

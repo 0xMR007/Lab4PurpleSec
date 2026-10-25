@@ -3,6 +3,7 @@
 
 # Log files
 *.log
+*.txt
 
 # Backup files
 *.bak

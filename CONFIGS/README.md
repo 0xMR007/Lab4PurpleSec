@@ -74,13 +74,13 @@ Contains configuration files for the vulnerable web server (DMZ-WEB01-LIN).
 - SSL/TLS configuration (if applicable)
 
 **Usage:**
-See `Docs/SETUP/Web_server_setup.md` for detailed deployment instructions.
+See `docs/SETUP/Web_server_setup.md` for detailed deployment instructions.
 
 ## Using Configuration Files
 
 ### Option 1: Manual Configuration
 
-Follow the setup guides in `Docs/SETUP/` which reference these configuration files and explain how to use them.
+Follow the setup guides in `docs/SETUP/` which reference these configuration files and explain how to use them.
 
 ### Option 2: Direct Import
 

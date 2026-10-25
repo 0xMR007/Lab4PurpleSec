@@ -17,13 +17,9 @@ The following scenarios are documented and can be executed in the lab:
   - Enumeration
   - Reverse shell & basic post-exploitation
 
-- **Blue Team skills**:
-  - Network traffic analysis
-  - IDS alert analysis (Suricata)
-  - Web server log analysis (Nginx)
-  - SIEM investigation and correlation (Wazuh)
+- **Blue Team**: Detection coverage for this scenario will be detailed in the "Detection status" section (coming soon).
 
-> **Note**: These skills are just examples and are not exhaustive.
+> **Note**: The Red Team skills above are examples and are not exhaustive.
 
 ---
 
@@ -37,18 +33,18 @@ The following scenarios are documented and can be executed in the lab:
   - Kerberos abuse (Kerberoasting, AS-REP Roasting)
   - Password / hash cracking
 
-- **Blue Team skills**:
-  - Windows event log analysis
-  - Kerberos authentication monitoring
-  - Detection of abnormal authentication behavior
-  - Endpoint alert analysis (Wazuh)
+- **Blue Team**: Detection coverage for this scenario will be detailed in the "Detection status" section (coming soon).
 
-> **Note**: These skills are just examples and are not exhaustive.
+> **Note**: The Red Team skills above are examples and are not exhaustive.
 
 ---
 
 ## Documentation
 
-- `Scenarios-1-and-2.pdf` — Detailed documentation for scenarios 1 and 2.
+- [00-lab-overview.md](00-lab-overview.md) - Lab topology, components and scenario index.
+- [scenario-1-web-exploitation.md](scenario-1-web-exploitation.md) - Scenario 1: web application exploitation (WAN → DMZ).
+- [scenario-2-active-directory.md](scenario-2-active-directory.md) - Scenario 2: Active Directory attacks on GOAD (Kerberoasting & AS-REP Roasting).
+
+> **Note**: The scenarios are documented in the Markdown files above. The previous `Scenarios-1-and-2-1.pdf` export is no longer bundled in the repository.
 
 For more information about the lab setup and architecture, refer to the main [README.md](../README.md) in the project root.

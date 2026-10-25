@@ -80,7 +80,7 @@ Below is the list of ISO images necessary for VM installation. All machines are 
 
 - **Metasploitable2**: ZIP archive containing the VMX file available at [https://www.rapid7.com/products/metasploit/metasploitable/](https://www.rapid7.com/products/metasploit/metasploitable/) — To open in VMware (File > Open Virtual Machine).
 - **Metasploitable3 (Linux and Windows)**: Installation via Vagrant from the official Rapid7 repository — See dedicated sections below for detailed instructions
-- **GOAD MINILAB (DC01 and WS01)**: Installation via Vagrant from the official Orange Cyberdefense repository — See `Docs/SETUP/GOAD_setup.md` for complete instructions
+- **GOAD MINILAB (DC01 and WS01)**: Installation via Vagrant from the official Orange Cyberdefense repository — See `docs/SETUP/GOAD_setup.md` for complete instructions
 
 # WAN
 
@@ -199,7 +199,7 @@ Windows domain controller (Active Directory) for the GOAD lab. This machine is e
 
 <aside>
 
-This machine is part of the GOAD lab MINILAB version. Its installation is done via Vagrant with a provider (VMware, VirtualBox, etc.). The complete installation is detailed in `Docs/SETUP/GOAD_setup.md` which covers deployment and integration into the LAN.
+This machine is part of the GOAD lab MINILAB version. Its installation is done via Vagrant with a provider (VMware, VirtualBox, etc.). The complete installation is detailed in `docs/SETUP/GOAD_setup.md` which covers deployment and integration into the LAN.
 
 </aside>
 
@@ -213,7 +213,7 @@ This machine is part of the GOAD lab MINILAB version. Its installation is done v
 
 ### Installation Step(s)
 
-Follow the detailed instructions in `Docs/SETUP/GOAD_setup.md` for complete GOAD MINILAB deployment. Main steps are:
+Follow the detailed instructions in `docs/SETUP/GOAD_setup.md` for complete GOAD MINILAB deployment. Main steps are:
 
 1. **Deployment via Vagrant**:
    - Follow the [official GOAD documentation](https://orange-cyberdefense.github.io/GOAD/installation/) to deploy the machine with Vagrant and VMware/VirtualBox.
@@ -232,7 +232,7 @@ Windows workstation integrated into the GOAD domain. Used to simulate a standard
 
 <aside>
 
-This machine is part of the GOAD lab MINILAB version. Its installation is done via Vagrant with a provider (VMware, VirtualBox, etc.). The complete installation is detailed in `Docs/SETUP/GOAD_setup.md` which covers deployment and integration into the LAN.
+This machine is part of the GOAD lab MINILAB version. Its installation is done via Vagrant with a provider (VMware, VirtualBox, etc.). The complete installation is detailed in `docs/SETUP/GOAD_setup.md` which covers deployment and integration into the LAN.
 
 </aside>
 
@@ -246,7 +246,7 @@ This machine is part of the GOAD lab MINILAB version. Its installation is done v
 
 ### Installation Step(s)
 
-Follow the detailed instructions in `Docs/SETUP/GOAD_setup.md` for complete GOAD MINILAB deployment. Main steps are:
+Follow the detailed instructions in `docs/SETUP/GOAD_setup.md` for complete GOAD MINILAB deployment. Main steps are:
 
 1. **Deployment via Vagrant**:
    - Deploy the machine by following the [official GOAD documentation](https://orange-cyberdefense.github.io/GOAD/installation/).
@@ -261,7 +261,7 @@ Follow the detailed instructions in `Docs/SETUP/GOAD_setup.md` for complete GOAD
 
 <aside>
 
-**Note**: If GOAD machine installation via Vagrant does not work with the VMware provider, you can temporarily use the VirtualBox provider. Once installation and provisioning are complete, you can migrate the VMs to VMware if necessary. Consult `Docs/SETUP/GOAD_setup.md` for more details on this procedure.
+**Note**: If GOAD machine installation via Vagrant does not work with the VMware provider, you can temporarily use the VirtualBox provider. Once installation and provisioning are complete, you can migrate the VMs to VMware if necessary. Consult `docs/SETUP/GOAD_setup.md` for more details on this procedure.
 
 </aside>
 
@@ -312,7 +312,7 @@ Linux web server exposed in DMZ that has several vulnerable web applications (OW
 1. **Create a new virtual machine** in VMware by selecting the ISO associated with Ubuntu Server 22.04 LTS.
 2. **Configure the network card mode** to use the DMZ LAN segment.
 3. **Configure network settings** (static IP or DHCP) and update `/etc/hosts` if needed.
-4. Follow the tool installation steps in `Docs/SETUP/Web_server_setup.md`
+4. Follow the tool installation steps in `docs/SETUP/Web_server_setup.md`
 
 ### Expected Result
 

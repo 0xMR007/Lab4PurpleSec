@@ -376,7 +376,7 @@ docker ps
 
 - Test access to applications via configured hostnames (e.g., `http://juice.lab`, `http://webgoat.lab`).
 
-Consult test files in `Docs/TESTS/Web_server.md` to validate connectivity and proper reverse proxy operation.
+Consult test files in `docs/TESTS/Web_server.md` to validate connectivity and proper reverse proxy operation.
 
 > NodeGoat uses MongoDB in the `nodegoat-db` container.
 >
