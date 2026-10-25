@@ -16,7 +16,7 @@ This document explains how to configure the **web server** in the DMZ, using **D
 4. [Nginx Configuration](#nginx-configuration)
 5. [Place Configuration Files](#place-configuration-files)
 6. [Test Configuration](#test-configuration)
-7. [Hosts File Configuration](#hosts-file-configuration-wan-side)
+7. [Hosts File Configuration](#wan-side-hosts-file-configuration)
 
 # Prerequisites
 

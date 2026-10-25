@@ -12,7 +12,7 @@ This document details the installation and configuration of all virtual machines
 2. [VM Summary](#vm-summary)
 3. [General Installation Principle](#general-installation-principle)
 4. [Required ISO Images](#required-iso-images)
-5. [Installation by Segment](#installation-by-segment)
+5. Installation by Segment
    - [WAN](#wan)
    - [LAN](#lan)
    - [DMZ](#dmz)
