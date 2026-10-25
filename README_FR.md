@@ -4,41 +4,12 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Status](https://img.shields.io/badge/status-active-success.svg)
-![Platform](https://img.shields.io/badge/platform-VMware%20%7C%20VirtualBox%20%7C%20Hyper--V-lightgrey.svg)
-![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)
-
-> **Note** : Ce projet s'appelait précédemment "Lab4OffSec" et a été renommé en "Lab4PurpleSec" pour mieux refléter son orientation Purple Team.
-
-> **Note** : Il s'agit d'une V1. Les retours et contributions sont les bienvenus.
-
-> **📜 Mention de licence** : L'utilisation de ce projet (y compris pour des CTF, des projets commerciaux, de la formation ou tout autre usage) est soumise aux termes et conditions de la licence MIT. Voir `LICENSE` pour les détails complets. En utilisant ce projet, vous acceptez de respecter les termes de la licence, notamment la conservation des mentions de droits d'auteur et des informations de licence.
 
 ![🌍 English version available here](/README.md)
 
 Lab4PurpleSec est un homelab de cybersécurité segmenté, conçu pour une pratique Red Team et Blue Team, combinant pentest réseau et web, attaques Active Directory et supervision défensive (SIEM, IDS/IPS). Il s'adresse aux étudiants et passionnés de cybersécurité qui préfèrent construire l'environnement « from scratch » plutôt que d'utiliser des VMs préconstruites. L'objectif est de comprendre chaque composant en l'installant et le configurant manuellement, de manière reproductible mais personnalisable.
 
-## Scénarios
-
-| Scénario | Statut | Lien |
-| --- | --- | --- |
-| Scénario 1 — Exploitation d'application web (WAN → DMZ) | documenté | [SCENARIOS/scenario-1-web-exploitation.md](SCENARIOS/scenario-1-web-exploitation.md) |
-| Scénario 2 — Attaques Active Directory sur GOAD (Kerberoasting & AS-REP Roasting) | documenté | [SCENARIOS/scenario-2-active-directory.md](SCENARIOS/scenario-2-active-directory.md) |
-
-> Voir aussi [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) pour la topologie du lab et l'index des scénarios.
-
-![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
-
-## TL;DR
-
-**Lab4PurpleSec** dispose des caractéristiques suivantes :
-
-- Architecture segmentée (WAN, DMZ, LAN, AD)
-- Firewall pfSense, IDS/IPS Suricata, SIEM Wazuh
-- Machines vulnérables type OWASP, Metasploitable, DC Windows
-- Guides détaillés d'installation et de configuration
-
-Sommaire
+## Sommaire
 
 - [Lab4PurpleSec](#lab4purplesec)
   - [Scénarios](#scénarios)
@@ -69,6 +40,28 @@ Sommaire
   - [Licence](#licence)
   - [Mentions légales](#mentions-légales)
   - [Credits](#credits)
+
+## Scénarios
+
+Le tableau suivant présente un aperçu des scénarios de cybersécurité documentés.
+
+| Scénario | Statut | Lien |
+| --- | --- | --- |
+| Scénario 1 - Exploitation d'application web (WAN → DMZ) | Documenté | [Scénario 1](SCENARIOS/scenario-1-web-exploitation.md) |
+| Scénario 2 - Attaques Active Directory sur GOAD (Kerberoasting & AS-REP Roasting) | Documenté | [Scénario 2](SCENARIOS/scenario-2-active-directory.md) |
+
+> Voir aussi [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) pour la topologie du lab et l'index des scénarios.
+
+![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
+
+## TL;DR
+
+**Lab4PurpleSec** dispose des caractéristiques suivantes :
+
+- Architecture segmentée (WAN, DMZ, LAN, AD)
+- Firewall pfSense, IDS/IPS Suricata, SIEM Wazuh
+- Machines vulnérables type OWASP, Metasploitable, DC Windows
+- Guides détaillés d'installation et de configuration
 
 ## Présentation
 
@@ -149,42 +142,50 @@ Cette section présente l'organisation du dépôt **Lab4PurpleSec** et décrit l
 
 ```
 Lab4PurpleSec/
-├── README.md                      — Présentation générale et démarrage rapide (EN)
-├── README_FR.md                   — Présentation générale et démarrage rapide (FR)
-├── CONTRIBUTING.md                — Guide de contribution
-├── LICENSE                        — Informations sur la licence et les droits d'utilisation
-├── .gitignore                     — Fichiers/dossiers exclus du suivi Git
+├── README.md                      - Présentation générale et démarrage rapide (EN)
+├── README_FR.md                   - Présentation générale et démarrage rapide (FR)
+├── CONTRIBUTING.md                - Guide de contribution
+├── LICENSE                        - Informations sur la licence et les droits d'utilisation
+├── .gitignore                     - Fichiers/dossiers exclus du suivi Git
 ├── .github/
 │   └── ISSUE_TEMPLATE/
-│        ├── bug_report.md         — Modèle de rapport de bug
-│        ├── feature_request.md    — Modèle de demande de fonctionnalité
-│        └── documentation.md      — Modèle d'amélioration de la documentation
-├── ARCHITECTURE.md                — Architecture, interfaces et diagrammes réseau
-├── assets/                        — Ressources visuelles (images, diagrammes, etc.)
-├── INVENTORY.md                   — Inventaire de toutes les VMs et de leurs caractéristiques principales
-├── automation/                    — Automatisation Vagrant et Ansible des VMs internes
-│   ├── README.md                  — Documentation et démarrage rapide de l'automatisation
-│   ├── ORCHESTRATION.md           — Guide d'orchestration des VMs et d'intégration externe
-│   ├── Vagrantfile                — Configuration Vagrant pour les VMs internes
-│   ├── ansible/                   — Playbooks et rôles Ansible
-│   └── scripts/                   — Scripts utilitaires pour l'automatisation
+│        ├── bug_report.md         - Modèle de rapport de bug
+│        ├── feature_request.md    - Modèle de demande de fonctionnalité
+│        └── documentation.md      - Modèle d'amélioration de la documentation
+├── ARCHITECTURE.md                - Architecture, interfaces et diagrammes réseau
+├── assets/                        - Ressources visuelles (images, diagrammes, etc.)
+├── INVENTORY.md                   - Inventaire de toutes les VMs et de leurs caractéristiques principales
+├── automation/                    - Automatisation Vagrant et Ansible des VMs internes
+│   ├── README.md                  - Documentation et démarrage rapide de l'automatisation
+│   ├── ORCHESTRATION.md           - Guide d'orchestration des VMs et d'intégration externe
+│   ├── Vagrantfile                - Configuration Vagrant pour les VMs internes
+│   ├── vagrant-config.yml         - Valeurs de configuration par défaut du Vagrantfile
+│   ├── inventory.yml              - Inventaire Ansible des VMs internes
+│   ├── ansible/                   - Playbooks et rôles Ansible
+│   └── scripts/                   - Scripts utilitaires pour l'automatisation
 ├── docs/
 │   ├── README.md
 │   ├── SETUP/
-│   │    ├── prereqs.md           — Prérequis matériels et logiciels
-│   │    ├── VMs_installation.md  — Guide détaillé d'installation et de configuration des VMs
-│   │    ├── pfsense_setup.md     — Documentation d'installation et de configuration de pfSense
-│   │    ├── Web_server_setup.md  — Guide de déploiement du serveur web
-│   │    ├── Wazuh_setup.md       — Guide d'installation de Wazuh et d'enrôlement des agents
-│   │    └── GOAD_setup.md        — Procédure de déploiement de l'Active Directory GOAD
+│   │    ├── prereqs.md           - Prérequis matériels et logiciels
+│   │    ├── VMs_installation.md  - Guide détaillé d'installation et de configuration des VMs
+│   │    ├── pfsense_setup.md     - Documentation d'installation et de configuration de pfSense
+│   │    ├── Web_server_setup.md  - Guide de déploiement du serveur web
+│   │    ├── Wazuh_setup.md       - Guide d'installation de Wazuh et d'enrôlement des agents
+│   │    └── GOAD_setup.md        - Procédure de déploiement de l'Active Directory GOAD
 │   └── TESTS/
-│        ├── Web_server.md        — Check-list de validation du serveur web
-│        ├── pfSense.md           — Vérifications pfSense et Suricata
-│        ├── Wazuh.md             — Tests/documentation Wazuh
-│        └── GOAD-MINILAB.md      — Documentation des vérifications GOAD MINILAB
+│        ├── Web_server.md        - Check-list de validation du serveur web
+│        ├── pfSense.md           - Vérifications pfSense et Suricata
+│        ├── Wazuh.md             - Tests/documentation Wazuh
+│        └── GOAD-MINILAB.md      - Documentation des vérifications GOAD MINILAB
+├── SCENARIOS/                     - Scénarios d'attaque et de détection (Purple Team)
+│   ├── README.md                  - Index et présentation des scénarios
+│   ├── 00-lab-overview.md         - Topologie commune du lab et index des scénarios
+│   ├── scenario-1-web-exploitation.md  - Scénario 1 : exploitation web (WAN → DMZ)
+│   ├── scenario-2-active-directory.md  - Scénario 2 : attaques Active Directory sur GOAD
+│   └── figures/                   - Captures d'écran et diagrammes des scénarios
 ├── CONFIGS/
-│   ├── web-server/                — Fichiers de configuration du serveur web (Nginx, Docker, etc.)
-│   └── pfsense/                   — Fichiers de configuration pfSense (règles, exports XML)
+│   ├── web-server/                - Fichiers de configuration du serveur web (Nginx, Docker, etc.)
+│   └── pfsense/                   - Fichiers de configuration pfSense (règles, exports XML)
 ```
 
 ## Démarrage rapide
@@ -327,7 +328,7 @@ Les composants suivants doivent être installés manuellement à partir des sour
 
 Consultez `docs/SETUP/prereqs.md` pour la liste complète des images ISO nécessaires et `docs/SETUP/VMs_installation.md` pour les guides d'installation manuelle détaillés.
 
-> **⚠️ Avertissement de sécurité** : Les machines créées contiennent des services intentionnellement vulnérables — **ne jamais** les connecter à un réseau de production. Changez immédiatement les mots de passe par défaut après l'installation. Ce lab est conçu pour un usage isolé et éducatif uniquement.
+> **⚠️ Avertissement de sécurité** : Les machines créées contiennent des services intentionnellement vulnérables - **ne jamais** les connecter à un réseau de production. Changez immédiatement les mots de passe par défaut après l'installation. Ce lab est conçu pour un usage isolé et éducatif uniquement.
 
 ## Contributions
 
