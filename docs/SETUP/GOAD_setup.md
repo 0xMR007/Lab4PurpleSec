@@ -89,8 +89,8 @@ This section details the procedure to install and integrate GOAD MINILAB into th
      - For WS01: 192.168.10.31
 5. **Launch VMs in Order**
    - Start each VM in the following order:
-     1. `DC01` (domain controller) — Wait for AD services to be completely started
-     2. `WS01` (workstation) — Wait for the machine to join the domain
+     1. `DC01` (domain controller) - Wait for AD services to be completely started
+     2. `WS01` (workstation) - Wait for the machine to join the domain
    - Verify that network services are operational.
 6. **Verify Proper Operation**
    - **Domain**: Verify that VMs are properly joined to the `mini.lab` domain.

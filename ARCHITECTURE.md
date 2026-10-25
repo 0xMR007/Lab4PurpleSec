@@ -44,7 +44,7 @@ The lab is segmented into three distinct subnets to isolate network functions an
 
 ### IP Addressing
 
-The complete static addressing plan for all lab hosts — with hostnames, network zones, IP addresses, operating systems and roles — is maintained in [INVENTORY.md](INVENTORY.md), which is the single source of truth for this information.
+The complete static addressing plan for all lab hosts - with hostnames, network zones, IP addresses, operating systems and roles - is maintained in [INVENTORY.md](INVENTORY.md), which is the single source of truth for this information.
 
 For the firewall's per-zone gateway addresses, see the pfSense interfaces below.
 

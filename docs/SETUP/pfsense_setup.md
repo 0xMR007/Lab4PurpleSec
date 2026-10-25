@@ -52,7 +52,7 @@ To simplify setup and ensure consistent configuration, a `pfsense-config.xml` fi
 <aside>
 
 **Important Note:**
-Before importing the XML file, ensure its integrity. You can open it in a text editor to verify it does not contain any unwanted parameters. This step is **optional** — you can also configure pfSense manually by following the sections below.
+Before importing the XML file, ensure its integrity. You can open it in a text editor to verify it does not contain any unwanted parameters. This step is **optional** - you can also configure pfSense manually by following the sections below.
 
 </aside>
 

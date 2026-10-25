@@ -70,17 +70,17 @@ Below is the list of ISO images necessary for VM installation. All machines are 
 
 ## ISO Images for Direct Installation
 
-- **pfSense (2.7.2)**: [https://atxfiles.netgate.com/mirror/downloads/](https://atxfiles.netgate.com/mirror/downloads/) — ISO image for firewall installation
-- **Kali Linux**: [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images) — ISO image for attack machines (WAN-ATTACK-LIN, LAN-ATTACK-LIN)
-- **Debian 12**: [https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/](https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/) — ISO image for the Wazuh Manager server (LAN-SIEM-LIN)
-- **Ubuntu 22.04 Desktop**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) — ISO image for the test machine (LAN-TEST-LIN)
-- **Ubuntu 22.04 Server**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) — ISO image for the web server (DMZ-WEB01-LIN)
+- **pfSense (2.7.2)**: [https://atxfiles.netgate.com/mirror/downloads/](https://atxfiles.netgate.com/mirror/downloads/) - ISO image for firewall installation
+- **Kali Linux**: [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images) - ISO image for attack machines (WAN-ATTACK-LIN, LAN-ATTACK-LIN)
+- **Debian 12**: [https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/](https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/) - ISO image for the Wazuh Manager server (LAN-SIEM-LIN)
+- **Ubuntu 22.04 Desktop**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) - ISO image for the test machine (LAN-TEST-LIN)
+- **Ubuntu 22.04 Server**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) - ISO image for the web server (DMZ-WEB01-LIN)
 
 ## Machines via Vagrant
 
-- **Metasploitable2**: ZIP archive containing the VMX file available at [https://www.rapid7.com/products/metasploit/metasploitable/](https://www.rapid7.com/products/metasploit/metasploitable/) — To open in VMware (File > Open Virtual Machine).
-- **Metasploitable3 (Linux and Windows)**: Installation via Vagrant from the official Rapid7 repository — See dedicated sections below for detailed instructions
-- **GOAD MINILAB (DC01 and WS01)**: Installation via Vagrant from the official Orange Cyberdefense repository — See `docs/SETUP/GOAD_setup.md` for complete instructions
+- **Metasploitable2**: ZIP archive containing the VMX file available at [https://www.rapid7.com/products/metasploit/metasploitable/](https://www.rapid7.com/products/metasploit/metasploitable/) - To open in VMware (File > Open Virtual Machine).
+- **Metasploitable3 (Linux and Windows)**: Installation via Vagrant from the official Rapid7 repository - See dedicated sections below for detailed instructions
+- **GOAD MINILAB (DC01 and WS01)**: Installation via Vagrant from the official Orange Cyberdefense repository - See `docs/SETUP/GOAD_setup.md` for complete instructions
 
 # WAN
 
