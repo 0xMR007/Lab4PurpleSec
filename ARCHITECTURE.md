@@ -44,26 +44,9 @@ The lab is segmented into three distinct subnets to isolate network functions an
 
 ### IP Addressing
 
-The following table presents the static addressing plan for all virtual machines in the lab, organized by network zone.
+The complete static addressing plan for all lab hosts — with hostnames, network zones, IP addresses, operating systems and roles — is maintained in [INVENTORY.md](INVENTORY.md), which is the single source of truth for this information.
 
-### DMZ
-
-| Hostname      | IP Address     | Description                                  |
-| ------------- | -------------- | -------------------------------------------- |
-| DMZ-MS2-LIN   | 192.168.20.104 | Metasploitable2 vulnerable machine           |
-| DMZ-MS3-LIN   | 192.168.20.106 | Metasploitable3 vulnerable machine (Linux)   |
-| DMZ-MS3-WIN   | 192.168.20.107 | Metasploitable3 vulnerable machine (Windows) |
-| DMZ-WEB01-LIN | 192.168.20.105 | Vulnerable web server (with Docker compose)  |
-
-### LAN
-
-| Hostname       | IP Address     | Description                                   |
-| -------------- | -------------- | --------------------------------------------- |
-| LAN-TEST-LIN   | 192.168.10.100 | Test machine (administration)                 |
-| LAN-ATTACK-LIN | 192.168.10.109 | Kali attack machine                           |
-| LAN-DC01-WIN   | 192.168.10.30  | Active Directory domain controller (mini.lab) |
-| LAN-SIEM-LIN   | 192.168.10.104 | Wazuh Manager server                          |
-| LAN-WS01-WIN   | 192.168.10.31  | Windows 10 client workstation (mini.lab)      |
+For the firewall's per-zone gateway addresses, see the pfSense interfaces below.
 
 ## pfSense
 
