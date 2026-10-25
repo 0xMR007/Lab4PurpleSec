@@ -16,9 +16,33 @@
 
 ![🇫🇷 Version française disponible ici](/README_FR.md)
 
+Lab4PurpleSec is a segmented cybersecurity homelab for hands-on Red Team and Blue Team practice, combining network and web penetration testing, Active Directory attacks, and defensive monitoring (SIEM, IDS/IPS). It is aimed at students and cybersecurity enthusiasts who prefer to build the environment from scratch rather than use pre-built VMs. The goal is to understand each component by installing and configuring it manually, in a reproducible yet customizable way.
+
+## Scenarios
+
+| Scenario | Status | Link |
+| --- | --- | --- |
+| Scenario 1 — Web application exploitation (WAN → DMZ) | documented | [SCENARIOS/scenario-1-web-exploitation.md](SCENARIOS/scenario-1-web-exploitation.md) |
+| Scenario 2 — Active Directory attacks on GOAD (Kerberoasting & AS-REP Roasting) | documented | [SCENARIOS/scenario-2-active-directory.md](SCENARIOS/scenario-2-active-directory.md) |
+
+> See also [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) for the lab topology and the scenario index.
+
+![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
+
+## TL;DR
+
+**Lab4PurpleSec** includes the following features:
+
+- Segmented architecture (WAN, DMZ, LAN, AD)
+- pfSense firewall, Suricata IDS/IPS, Wazuh SIEM
+- Vulnerable machines (OWASP, Metasploitable, Windows DC)
+- Detailed installation and configuration guides
+
 Table of Contents
 
 - [Lab4PurpleSec](#lab4purplesec)
+  - [Scenarios](#scenarios)
+  - [TL;DR](#tldr)
   - [Overview](#overview)
   - [Prerequisites](#prerequisites)
     - [Hardware Requirements](#hardware-requirements)
@@ -27,7 +51,6 @@ Table of Contents
       - [Optimal Configuration (Maximum Performance)](#optimal-configuration-maximum-performance)
     - [Software Requirements](#software-requirements)
     - [Project Goals](#project-goals)
-  - [TL;DR](#tldr)
   - [Network Architecture](#network-architecture)
     - [Lab4PurpleSec](#lab4purplesec-1)
     - [GOAD-MINILAB](#goad-minilab)
@@ -108,22 +131,11 @@ For detailed hardware and software requirements, see `docs/SETUP/prereqs.md`.
 - **Strengthens understanding**: Mastery of systems, networks, and configurations
 - **Facilitates customization**: Easy adaptation according to specific needs
 
-## TL;DR
-
-**Lab4PurpleSec** includes the following features:
-
-- Segmented architecture (WAN, DMZ, LAN, AD)
-- pfSense firewall, Suricata IDS/IPS, Wazuh SIEM
-- Vulnerable machines (OWASP, Metasploitable, Windows DC)
-- Detailed installation and configuration guides
-
 ## Network Architecture
 
 ### Lab4PurpleSec
 
-Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB).
-
-![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
+Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB). The overall topology is shown in the diagram at the top of this document.
 
 ### GOAD-MINILAB
 
