@@ -3,7 +3,6 @@
 
 # Log files
 *.log
-*.txt
 
 # Backup files
 *.bak
@@ -27,3 +26,6 @@ id_rsa*
 *.csr
 *.p12
 *.pfx
+
+# Claude Code repo
+.claude/
