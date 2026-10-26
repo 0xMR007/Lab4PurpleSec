@@ -34,7 +34,7 @@ This section details the IP topology, addressing plan, and filtering rules imple
 
 The lab is segmented into three distinct subnets to isolate network functions and limit attack propagation between zones.
 
-> Cf. `Docs/SETUP/prereqs.md`
+> Cf. `docs/SETUP/prereqs.md`
 
 | Subnet          | Function                            |
 | --------------- | ----------------------------------- |
@@ -44,32 +44,15 @@ The lab is segmented into three distinct subnets to isolate network functions an
 
 ### IP Addressing
 
-The following table presents the static addressing plan for all virtual machines in the lab, organized by network zone.
+The complete static addressing plan for all lab hosts - with hostnames, network zones, IP addresses, operating systems and roles - is maintained in [INVENTORY.md](INVENTORY.md), which is the single source of truth for this information.
 
-### DMZ
-
-| Hostname      | IP Address     | Description                                  |
-| ------------- | -------------- | -------------------------------------------- |
-| DMZ-MS2-LIN   | 192.168.20.104 | Metasploitable2 vulnerable machine           |
-| DMZ-MS3-LIN   | 192.168.20.106 | Metasploitable3 vulnerable machine (Linux)   |
-| DMZ-MS3-WIN   | 192.168.20.107 | Metasploitable3 vulnerable machine (Windows) |
-| DMZ-WEB01-LIN | 192.168.20.105 | Vulnerable web server (with Docker compose)  |
-
-### LAN
-
-| Hostname       | IP Address     | Description                                   |
-| -------------- | -------------- | --------------------------------------------- |
-| LAN-TEST-LIN   | 192.168.10.100 | Test machine (administration)                 |
-| LAN-ATTACK-LIN | 192.168.10.109 | Kali attack machine                           |
-| LAN-DC01-WIN   | 192.168.10.30  | Active Directory domain controller (mini.lab) |
-| LAN-SIEM-LIN   | 192.168.10.104 | Wazuh Manager server                          |
-| LAN-WS01-WIN   | 192.168.10.31  | Windows 10 client workstation (mini.lab)      |
+For the firewall's per-zone gateway addresses, see the pfSense interfaces below.
 
 ## pfSense
 
 The pfSense firewall is the core of network segmentation, managing three distinct interfaces and applying strict filtering rules to control flows between WAN, LAN, and DMZ.
 
-> Cf. `Docs/SETUP/pfsense_setup.md`
+> Cf. `docs/SETUP/pfsense_setup.md`
 
 ### Interfaces
 
@@ -162,7 +145,7 @@ The table below references all intentionally vulnerable web applications accessi
 | DMZ-MS3-LIN   | ms3linux.lab      | 80   | Web (MS3 Linux) | Metasploitable3 (Linux) – Vulnerable web services (chat app, drupal, etc…) |
 | DMZ-MS3-LIN   | ms3linux-8080.lab | 8080 | Web (MS3 Linux) | Metasploitable3 (Linux) – Old Continuum web service                        |
 
-See `Docs/SETUP/Web_server_setup.md` for more details.
+See `docs/SETUP/Web_server_setup.md` for more details.
 
 ## Typical Flows
 

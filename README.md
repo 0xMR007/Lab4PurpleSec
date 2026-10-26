@@ -4,21 +4,16 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Status](https://img.shields.io/badge/status-active-success.svg)
-![Platform](https://img.shields.io/badge/platform-VMware%20%7C%20VirtualBox%20%7C%20Hyper--V-lightgrey.svg)
-![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)
-
-> **Note**: This project was previously named "Lab4OffSec" and has been renamed to "Lab4PurpleSec" to better reflect its Purple Team focus.
-
-> **Note**: This is a V1. Feedback and contributions are welcome.
-
-> **📜 License Notice**: The use of this project (including for CTFs, commercial projects, training, or any other purpose) is subject to the terms and conditions of the MIT License. See `LICENSE` for full details. By using this project, you agree to comply with the license terms, including maintaining copyright notices and license information.
 
 ![🇫🇷 Version française disponible ici](/README_FR.md)
 
-Table of Contents
+Lab4PurpleSec is a segmented cybersecurity homelab for hands-on Red Team and Blue Team practice, combining network and web penetration testing, Active Directory attacks, and defensive monitoring (SIEM, IDS/IPS). It is aimed at students and cybersecurity enthusiasts who prefer to build the environment from scratch rather than use pre-built VMs. The goal is to understand each component by installing and configuring it manually, in a reproducible yet customizable way.
+
+## Table of Contents
 
 - [Lab4PurpleSec](#lab4purplesec)
+  - [Scenarios](#scenarios)
+  - [TL;DR](#tldr)
   - [Overview](#overview)
   - [Prerequisites](#prerequisites)
     - [Hardware Requirements](#hardware-requirements)
@@ -27,7 +22,6 @@ Table of Contents
       - [Optimal Configuration (Maximum Performance)](#optimal-configuration-maximum-performance)
     - [Software Requirements](#software-requirements)
     - [Project Goals](#project-goals)
-  - [TL;DR](#tldr)
   - [Network Architecture](#network-architecture)
     - [Lab4PurpleSec](#lab4purplesec-1)
     - [GOAD-MINILAB](#goad-minilab)
@@ -36,9 +30,9 @@ Table of Contents
     - [Option 1: Automated Deployment (Recommended)](#option-1-automated-deployment-recommended)
     - [Option 2: Manual Deployment](#option-2-manual-deployment)
   - [Possible Scenarios](#possible-scenarios)
-    - [1. Pivoting — WAN → DMZ → LAN](#1-pivoting--wan--dmz--lan)
+    - [1. Pivoting - WAN → DMZ → LAN](#1-pivoting---wan--dmz--lan)
     - [2. OWASP Web Exploit → Persistence (webshell)](#2-owasp-web-exploit--persistence-webshell)
-    - [3. Kerberoasting (AD) — reconnaissance \& ticket recovery](#3-kerberoasting-ad--reconnaissance--ticket-recovery)
+    - [3. Kerberoasting (AD) - reconnaissance \& ticket recovery](#3-kerberoasting-ad---reconnaissance--ticket-recovery)
   - [Component Installation](#component-installation)
     - [Automated Components](#automated-components)
     - [Manual Components](#manual-components)
@@ -46,6 +40,26 @@ Table of Contents
   - [License](#license)
   - [Legal Notice](#legal-notice)
   - [Credits](#credits)
+
+## Scenarios
+
+The following table provides an overview of the documented cybersecurity scenarios.
+
+| Scenario | Status | Link |
+| --- | --- | --- |
+| Scenario 1 - Web application exploitation (WAN → DMZ) | Documented | [Scenario 1](SCENARIOS/scenario-1-web-exploitation.md) |
+| Scenario 2 - Active Directory attacks on GOAD (Kerberoasting & AS-REP Roasting) | Documented | [Scenario 2](SCENARIOS/scenario-2-active-directory.md) |
+
+> See also [SCENARIOS/00-lab-overview.md](SCENARIOS/00-lab-overview.md) for the lab topology and the scenario index.
+
+## TL;DR
+
+**Lab4PurpleSec** includes the following features:
+
+- Segmented architecture (WAN, DMZ, LAN, AD)
+- pfSense firewall, Suricata IDS/IPS, Wazuh SIEM
+- Vulnerable machines (OWASP, Metasploitable, Windows DC)
+- Detailed installation and configuration guides
 
 ## Overview
 
@@ -108,20 +122,11 @@ For detailed hardware and software requirements, see `docs/SETUP/prereqs.md`.
 - **Strengthens understanding**: Mastery of systems, networks, and configurations
 - **Facilitates customization**: Easy adaptation according to specific needs
 
-## TL;DR
-
-**Lab4PurpleSec** includes the following features:
-
-- Segmented architecture (WAN, DMZ, LAN, AD)
-- pfSense firewall, Suricata IDS/IPS, Wazuh SIEM
-- Vulnerable machines (OWASP, Metasploitable, Windows DC)
-- Detailed installation and configuration guides
-
 ## Network Architecture
 
 ### Lab4PurpleSec
 
-Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB).
+Lab4PurpleSec is an environment dedicated to application and system vulnerability exploitation, hosting intentionally vulnerable machines (Metasploitable2/3), OWASP web applications in an isolated DMZ zone, as well as a vulnerable Active Directory environment (GOAD MINILAB). The overall topology is shown in the following diagram.
 
 ![Homelab-light.png](/assets/images/Diagrams/Homelab-light.png)
 
@@ -137,42 +142,50 @@ This section presents the organization of the **Lab4PurpleSec** repository and d
 
 ```
 Lab4PurpleSec/
-├── README.md                      — General overview and quick start (EN)
-├── README_FR.md                   — General overview and quick start (FR)
-├── CONTRIBUTING.md                — Contribution guidelines
-├── LICENSE                        — License and usage information
-├── .gitignore                     — Files/directories excluded from Git versioning
+├── README.md                      - General overview and quick start (EN)
+├── README_FR.md                   - General overview and quick start (FR)
+├── CONTRIBUTING.md                - Contribution guidelines
+├── LICENSE                        - License and usage information
+├── .gitignore                     - Files/directories excluded from Git versioning
 ├── .github/
 │   └── ISSUE_TEMPLATE/
-│        ├── bug_report.md         — Bug report template
-│        ├── feature_request.md    — Feature request template
-│        └── documentation.md      — Documentation improvement template
-├── ARCHITECTURE.md                — Architecture information, interfaces, network diagrams
-├── assets/                        — Visual resources (images, diagrams, etc.)
-├── INVENTORY.md                   — Inventory list of all VMs and main characteristics
-├── automation/                    — Vagrant and Ansible automation for internal VMs
-│   ├── README.md                  — Automation documentation and quick start
-│   ├── ORCHESTRATION.md           — VM orchestration and external integration guide
-│   ├── Vagrantfile                — Vagrant configuration for internal VMs
-│   ├── ansible/                   — Ansible playbooks and roles
-│   └── scripts/                   — Helper scripts for automation
+│        ├── bug_report.md         - Bug report template
+│        ├── feature_request.md    - Feature request template
+│        └── documentation.md      - Documentation improvement template
+├── ARCHITECTURE.md                - Architecture information, interfaces, network diagrams
+├── assets/                        - Visual resources (images, diagrams, etc.)
+├── INVENTORY.md                   - Inventory list of all VMs and main characteristics
+├── automation/                    - Vagrant and Ansible automation for internal VMs
+│   ├── README.md                  - Automation documentation and quick start
+│   ├── ORCHESTRATION.md           - VM orchestration and external integration guide
+│   ├── Vagrantfile                - Vagrant configuration for internal VMs
+│   ├── vagrant-config.yml         - Default configuration values for the Vagrantfile
+│   ├── inventory.yml              - Ansible inventory of the internal VMs
+│   ├── ansible/                   - Ansible playbooks and roles
+│   └── scripts/                   - Helper scripts for automation
 ├── docs/
 │   ├── README.md
 │   ├── SETUP/
-│   │    ├── prereqs.md           — Hardware and software requirements
-│   │    ├── VMs_installation.md  — Detailed VM installation and configuration guide
-│   │    ├── pfsense_setup.md     — pfSense installation and configuration documentation
-│   │    ├── Web_server_setup.md  — Web server deployment guide
-│   │    ├── Wazuh_setup.md       — Wazuh installation and agent enrollment guide
-│   │    └── GOAD_setup.md        — GOAD Active Directory deployment procedure
+│   │    ├── prereqs.md           - Hardware and software requirements
+│   │    ├── VMs_installation.md  - Detailed VM installation and configuration guide
+│   │    ├── pfsense_setup.md     - pfSense installation and configuration documentation
+│   │    ├── Web_server_setup.md  - Web server deployment guide
+│   │    ├── Wazuh_setup.md       - Wazuh installation and agent enrollment guide
+│   │    └── GOAD_setup.md        - GOAD Active Directory deployment procedure
 │   └── TESTS/
-│        ├── Web_server.md        — Web server validation checklist
-│        ├── pfSense.md           — pfSense and Suricata verification
-│        ├── Wazuh.md             — Wazuh testing/documentation
-│        └── GOAD-MINILAB.md      — GOAD MINILAB verification documentation
+│        ├── Web_server.md        - Web server validation checklist
+│        ├── pfSense.md           - pfSense and Suricata verification
+│        ├── Wazuh.md             - Wazuh testing/documentation
+│        └── GOAD-MINILAB.md      - GOAD MINILAB verification documentation
+├── SCENARIOS/                     - Attack & detection scenarios (Purple Team)
+│   ├── README.md                  - Scenario index and overview
+│   ├── 00-lab-overview.md         - Shared lab topology and scenario index
+│   ├── scenario-1-web-exploitation.md  - Scenario 1: web exploitation (WAN → DMZ)
+│   ├── scenario-2-active-directory.md  - Scenario 2: Active Directory attacks on GOAD
+│   └── figures/                   - Screenshots and diagrams for the scenarios
 ├── CONFIGS/
-│   ├── web-server/                — Web server configuration files (Nginx, Docker, etc.)
-│   └── pfsense/                   — pfSense configuration files (rules, XML exports)
+│   ├── web-server/                - Web server configuration files (Nginx, Docker, etc.)
+│   └── pfsense/                   - pfSense configuration files (rules, XML exports)
 ```
 
 ## Quick Start
@@ -265,7 +278,7 @@ You can:
 
 ## Possible Scenarios
 
-### 1. Pivoting — WAN → DMZ → LAN
+### 1. Pivoting - WAN → DMZ → LAN
 
 **Objective:** Obtain initial access on a web VM in DMZ then pivot to a LAN/AD machine.
 
@@ -283,7 +296,7 @@ You can:
 
 **Expected results:** web logs + IDS alerts + webshell capture.
 
-### 3. Kerberoasting (AD) — reconnaissance & ticket recovery
+### 3. Kerberoasting (AD) - reconnaissance & ticket recovery
 
 **Objective:** Recover Kerberos service tickets to attack service accounts.
 
@@ -315,7 +328,7 @@ The following components must be installed manually from official sources:
 
 Consult `docs/SETUP/prereqs.md` for the complete list of required ISO images and `docs/SETUP/VMs_installation.md` for detailed manual installation guides.
 
-> **⚠️ Security Warning**: The created machines contain intentionally vulnerable services — **never** connect them to a production network. Immediately change default passwords after installation. This lab is designed for isolated, educational use only.
+> **⚠️ Security Warning**: The created machines contain intentionally vulnerable services - **never** connect them to a production network. Immediately change default passwords after installation. This lab is designed for isolated, educational use only.
 
 ## Contributions
 

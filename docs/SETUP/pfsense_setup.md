@@ -52,7 +52,7 @@ To simplify setup and ensure consistent configuration, a `pfsense-config.xml` fi
 <aside>
 
 **Important Note:**
-Before importing the XML file, ensure its integrity. You can open it in a text editor to verify it does not contain any unwanted parameters. This step is **optional** — you can also configure pfSense manually by following the sections below.
+Before importing the XML file, ensure its integrity. You can open it in a text editor to verify it does not contain any unwanted parameters. This step is **optional** - you can also configure pfSense manually by following the sections below.
 
 </aside>
 
@@ -92,7 +92,7 @@ This guide covers pfSense deployment as a firewall and router for a segmented la
    - 2 GB RAM
    - 2 CPUs
    - 35 GB storage
-   - pfSense ISO (2.7.2) (see `Docs/SETUP/prereqs.md`)
+   - pfSense ISO (2.7.2) (see `docs/SETUP/prereqs.md`)
 2. Start, and follow the default installation
 3. Assign static IP to each interface (WAN/DMZ/LAN):
    1. WAN → DHCP (bridge)
@@ -124,9 +124,9 @@ And finally for the DMZ:
 
 ## Network Connectivity Tests
 
-All tests are available in the file `Docs/TESTS/pfSense.md`. See the "Network Connectivity Tests" section for more details.
+All tests are available in the file `docs/TESTS/pfSense.md`. See the "Network Connectivity Tests" section for more details.
 
-Below is an example of the tests from the `Docs/TESTS/pfSense.md` file:
+Below is an example of the tests from the `docs/TESTS/pfSense.md` file:
 
 ### WAN
 
@@ -193,7 +193,7 @@ For now, **Lab4PurpleSec** only has this NAT rule.
 
 ## NAT Test Sample
 
-All tests are available in the file `Docs/TESTS/pfSense.md`. See the "Network Connectivity Tests" section for more details.
+All tests are available in the file `docs/TESTS/pfSense.md`. See the "Network Connectivity Tests" section for more details.
 
 # Suricata Installation
 
@@ -269,9 +269,9 @@ When you have finished configuring an interface, you can simply duplicate it the
 
 # Suricata Tests
 
-All Suricata and firewall/NAT rule validation tests are available in the `Docs/TESTS/` directory. See `Docs/TESTS/pfSense.md` for details.
+All Suricata and firewall/NAT rule validation tests are available in the `docs/TESTS/` directory. See `docs/TESTS/pfSense.md` for details.
 
-Below is an example of the tests from the `Docs/TESTS/pfSense.md` file:
+Below is an example of the tests from the `docs/TESTS/pfSense.md` file:
 
 Alerts returned on web interface:
 

@@ -16,7 +16,7 @@ This document explains how to configure the **web server** in the DMZ, using **D
 4. [Nginx Configuration](#nginx-configuration)
 5. [Place Configuration Files](#place-configuration-files)
 6. [Test Configuration](#test-configuration)
-7. [Hosts File Configuration](#hosts-file-configuration-wan-side)
+7. [Hosts File Configuration](#wan-side-hosts-file-configuration)
 
 # Prerequisites
 
@@ -376,7 +376,7 @@ docker ps
 
 - Test access to applications via configured hostnames (e.g., `http://juice.lab`, `http://webgoat.lab`).
 
-Consult test files in `Docs/TESTS/Web_server.md` to validate connectivity and proper reverse proxy operation.
+Consult test files in `docs/TESTS/Web_server.md` to validate connectivity and proper reverse proxy operation.
 
 > NodeGoat uses MongoDB in the `nodegoat-db` container.
 >

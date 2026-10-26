@@ -44,13 +44,13 @@ This section describes the minimum hardware and software requirements necessary 
 > **Note**: This lab can be deployed using VirtualBox if needed, but VMware Workstation Pro was personally used for this documentation.
 
 - Required ISO images:
-  - **pfSense (2.7.2)**: [https://atxfiles.netgate.com/mirror/downloads/](https://atxfiles.netgate.com/mirror/downloads/) — ISO image for firewall installation
-  - **Kali Linux**: [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images) — ISO image for attack machines
-  - **Metasploitable2**: [https://www.rapid7.com/products/metasploit/metasploitable/](https://www.rapid7.com/products/metasploit/metasploitable/) — ZIP archive containing the VMX file (to open in VMware) or installation via Vagrant from the official repository
-  - **Metasploitable3 (Linux and Windows)**: Installation via Vagrant from the official Rapid7 repository — See `Docs/SETUP/VMs_installation.md` for detailed instructions
-  - **Debian 12**: [https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/](https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/) — ISO image for the Wazuh Manager server
-  - **Ubuntu 22.04 Desktop**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) — ISO image for the test machine
-  - GOAD MINILAB: Installation via Vagrant from the official Orange Cyberdefense repository: [https://github.com/Orange-Cyberdefense/GOAD](https://github.com/Orange-Cyberdefense/GOAD) — See `Docs/SETUP/GOAD_setup.md` for LAN integration
+  - **pfSense (2.7.2)**: [https://atxfiles.netgate.com/mirror/downloads/](https://atxfiles.netgate.com/mirror/downloads/) - ISO image for firewall installation
+  - **Kali Linux**: [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images) - ISO image for attack machines
+  - **Metasploitable2**: [https://www.rapid7.com/products/metasploit/metasploitable/](https://www.rapid7.com/products/metasploit/metasploitable/) - ZIP archive containing the VMX file (to open in VMware) or installation via Vagrant from the official repository
+  - **Metasploitable3 (Linux and Windows)**: Installation via Vagrant from the official Rapid7 repository - See `docs/SETUP/VMs_installation.md` for detailed instructions
+  - **Debian 12**: [https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/](https://cdimage.debian.org/cdimage/archive/12.11.0/amd64/iso-cd/) - ISO image for the Wazuh Manager server
+  - **Ubuntu 22.04 Desktop**: [https://releases.ubuntu.com/22.04/](https://releases.ubuntu.com/22.04/) - ISO image for the test machine
+  - GOAD MINILAB: Installation via Vagrant from the official Orange Cyberdefense repository: [https://github.com/Orange-Cyberdefense/GOAD](https://github.com/Orange-Cyberdefense/GOAD) - See `docs/SETUP/GOAD_setup.md` for LAN integration
 
 ### Installation Note
 

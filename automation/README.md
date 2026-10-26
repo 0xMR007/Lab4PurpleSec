@@ -140,10 +140,10 @@ ansible-playbook -i inventory-vagrant.py playbooks/site.yml
 
 After automated provisioning, complete the manual setup:
 
-1. **Install and configure pfSense** (see `../Docs/SETUP/pfsense_setup.md`)
+1. **Install and configure pfSense** (see `../docs/SETUP/pfsense_setup.md`)
 2. **Configure Suricata on pfSense**
-3. **Set up web server** on DMZ-WEB01-LIN (see `../Docs/SETUP/Web_server_setup.md`)
-4. **Deploy GOAD MINILAB** (see `../Docs/SETUP/GOAD_setup.md`)
+3. **Set up web server** on DMZ-WEB01-LIN (see `../docs/SETUP/Web_server_setup.md`)
+4. **Deploy GOAD MINILAB** (see `../docs/SETUP/GOAD_setup.md`)
 5. **Deploy Metasploitable2/3** VMs
 6. **Install Wazuh agents** on Windows machines and pfSense
 
